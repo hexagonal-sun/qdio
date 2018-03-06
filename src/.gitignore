@@ -1,0 +1,6 @@
+CMakeFiles/
+CMakeCache.txt
+Makefile
+qdio
+qdio_autogen/
+cmake_install.cmake
