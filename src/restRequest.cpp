@@ -3,9 +3,12 @@
 #include <QNetworkReply>
 
 #include "restRequest.h"
+#include "authManager.h"
 
-RestRequest::RestRequest(const QString requestUrl)
+RestRequest::RestRequest(const QString requestUrl,
+                         bool requiresAuth)
     : requestUrl_(requestUrl),
+      requiresAuth_(requiresAuth),
       netManager_(this)
 {
     connect(&netManager_, &QNetworkAccessManager::finished,
@@ -16,7 +19,13 @@ void RestRequest::execute(void)
 {
     QUrl url("http://localhost:8000/" + requestUrl_);
 
-    netManager_.get(QNetworkRequest(url));
+    QNetworkRequest request(url);
+
+    if (requiresAuth_)
+        request.setRawHeader("Authorization", "Token " +
+                             AuthManager::getAuthToken().toUtf8());
+
+    netManager_.get(request);
 }
 
 void RestRequest::post(QJsonDocument json)

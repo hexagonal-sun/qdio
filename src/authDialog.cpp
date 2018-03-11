@@ -7,7 +7,7 @@
 
 AuthDialog::AuthDialog(QWidget *parent) :
     QDialog(parent),
-    authRequest("api/auth/login/"),
+    authRequest("api/auth/login/", false),
     ui(new Ui::AuthDialog)
 {
     ui->setupUi(this);

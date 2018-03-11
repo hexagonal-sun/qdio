@@ -10,7 +10,8 @@ class RestRequest : public QObject
 {
     Q_OBJECT
 public:
-    explicit RestRequest(const QString requestUrl);
+    explicit RestRequest(const QString requestUrl,
+                         bool requiresAuth = true);
     void execute(void);
     void post(QJsonDocument payload);
 
@@ -19,6 +20,7 @@ signals:
     void requestError(const QString errorString, QNetworkReply::NetworkError error);
 
 private:
+    bool requiresAuth_;
     const QString requestUrl_;
     void networkRequestFinished(QNetworkReply *rep);
     QNetworkAccessManager netManager_;
