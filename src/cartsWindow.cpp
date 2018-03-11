@@ -5,12 +5,15 @@
 #include <QJsonObject>
 
 #include "cartsWindow.h"
+#include "authDialog.h"
 
 CartsWindow::CartsWindow(QWidget *parent) :
     QMainWindow(parent),
     cartsRequest("carts/1/")
 {
     centralWidget = new QWidget(this);
+    AuthDialog authDlg;
+    authDlg.exec();
 
     setCentralWidget(centralWidget);
     gridLayout = new QGridLayout(centralWidget);
