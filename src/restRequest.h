@@ -12,6 +12,7 @@ class RestRequest : public QObject
 public:
     explicit RestRequest(const QString requestUrl);
     void execute(void);
+    void post(QJsonDocument payload);
 
 signals:
     void requestFinished(const QJsonDocument &restData);

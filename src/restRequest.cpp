@@ -19,6 +19,16 @@ void RestRequest::execute(void)
     netManager_.get(QNetworkRequest(url));
 }
 
+void RestRequest::post(QJsonDocument json)
+{
+    QUrl url("http://localhost:8000/" + requestUrl_);
+    QNetworkRequest request(url);
+
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    netManager_.post(request, json.toJson());
+}
+
 void RestRequest::networkRequestFinished(QNetworkReply *reply)
 {
     QJsonParseError parseError;
