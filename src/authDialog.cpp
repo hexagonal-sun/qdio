@@ -1,6 +1,7 @@
 #include <QMessageBox>
 #include <QJsonObject>
 
+#include "authManager.h"
 #include "authDialog.h"
 #include "ui_authDialog.h"
 
@@ -34,8 +35,7 @@ void AuthDialog::authRequestFinished(const QJsonDocument &reply)
     QJsonObject obj = reply.object();
     QString authToken = obj["token"].toString();
 
-    QMessageBox::information(this, "foo", authToken);
-
+    AuthManager::setAuthToken(authToken);
     accept();
 }
 
