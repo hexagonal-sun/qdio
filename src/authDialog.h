@@ -20,7 +20,7 @@ public:
 private slots:
     void accepted(void);
     void authRequestFinished(const QJsonDocument &reply);
-    void authError(const QString &errorString);
+    void authError(const QString &errorString, QNetworkReply::NetworkError error);
 
 private:
     void setControlsEnabled(bool state);

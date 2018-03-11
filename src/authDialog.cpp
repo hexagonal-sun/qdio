@@ -39,10 +39,15 @@ void AuthDialog::authRequestFinished(const QJsonDocument &reply)
     accept();
 }
 
-void AuthDialog::authError(const QString &errorString)
+void AuthDialog::authError(const QString &errorString, QNetworkReply::NetworkError error)
 {
+    QString userErrorString = errorString;
+
+    if (error == QNetworkReply::ProtocolInvalidOperationError)
+        userErrorString = "Invalid username or password.";
+
     QMessageBox::warning(this, "Authentication Failed",
-                         "Authentication failed: " + errorString);
+                         "Authentication failed: " + userErrorString);
 
     setControlsEnabled(true);
 }
