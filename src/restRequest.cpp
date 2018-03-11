@@ -38,11 +38,11 @@ void RestRequest::networkRequestFinished(QNetworkReply *reply)
         json = QJsonDocument::fromJson(reply->readAll(), &parseError);
 
         if (json.isNull())
-            emit requestError(parseError.errorString());
+            emit requestError(parseError.errorString(), reply->error());
         else
             emit requestFinished(json);
     } else
-        emit requestError(reply->errorString());
+        emit requestError(reply->errorString(),  reply->error());
 
     reply->deleteLater();
 }

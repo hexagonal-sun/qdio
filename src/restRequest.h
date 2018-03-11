@@ -16,7 +16,7 @@ public:
 
 signals:
     void requestFinished(const QJsonDocument &restData);
-    void requestError(const QString errorString);
+    void requestError(const QString errorString, QNetworkReply::NetworkError error);
 
 private:
     const QString requestUrl_;
