@@ -12,7 +12,7 @@ class RestRequest : public QObject
 public:
     explicit RestRequest(const QString requestUrl,
                          bool requiresAuth = true);
-    void execute(void);
+    void get(void);
     void post(QJsonDocument payload);
 
 signals:

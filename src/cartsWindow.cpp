@@ -56,7 +56,7 @@ CartsWindow::CartsWindow(QWidget *parent) :
                                      errorString);
             });
 
-    cartsRequest.execute();
+    cartsRequest.get();
 }
 
 CartsWindow::~CartsWindow()

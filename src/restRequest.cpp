@@ -15,7 +15,7 @@ RestRequest::RestRequest(const QString requestUrl,
             this, &RestRequest::networkRequestFinished);
 }
 
-void RestRequest::execute(void)
+void RestRequest::get(void)
 {
     QUrl url("http://localhost:8000/" + requestUrl_);
 
