@@ -3,7 +3,7 @@
 #include <QNetworkReply>
 
 #include "restRequest.h"
-#include "authManager.h"
+#include "sessionManager.h"
 
 RestRequest::RestRequest(const QString requestUrl,
                          bool requiresAuth)
@@ -23,7 +23,7 @@ void RestRequest::get(void)
 
     if (requiresAuth_)
         request.setRawHeader("Authorization", "Token " +
-                             AuthManager::getAuthToken().toUtf8());
+                             SessionManager::getInstance().getAuthToken().toUtf8());
 
     netManager_.get(request);
 }
