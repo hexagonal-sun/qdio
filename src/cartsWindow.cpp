@@ -12,8 +12,6 @@ CartsWindow::CartsWindow(QWidget *parent) :
     cartsRequest("carts/1/")
 {
     centralWidget = new QWidget(this);
-    AuthDialog authDlg;
-    authDlg.exec();
 
     setCentralWidget(centralWidget);
     gridLayout = new QGridLayout(centralWidget);
