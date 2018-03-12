@@ -1,11 +1,11 @@
-#include "cartsWindow.h"
+#include "authDialog.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    CartsWindow w;
-    w.show();
+
+    SessionManager::getInstance().begin();
 
     return a.exec();
 }

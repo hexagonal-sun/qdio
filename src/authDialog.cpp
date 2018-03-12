@@ -3,6 +3,7 @@
 
 #include "authManager.h"
 #include "authDialog.h"
+#include "sessionManager.h"
 #include "ui_authDialog.h"
 
 AuthDialog::AuthDialog(QWidget *parent) :
@@ -36,7 +37,7 @@ void AuthDialog::authRequestFinished(const QJsonDocument &reply)
     QString authToken = obj["token"].toString();
 
     AuthManager::setAuthToken(authToken);
-    accept();
+    SessionManager::getInstance().authFinished(authToken);
 }
 
 void AuthDialog::authError(const QString &errorString, QNetworkReply::NetworkError error)

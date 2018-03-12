@@ -4,6 +4,7 @@
 #include <QDialog>
 
 #include "restRequest.h"
+#include "sessionManager.h"
 
 namespace Ui {
 class AuthDialog;

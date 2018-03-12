@@ -1,17 +1,27 @@
 #ifndef SESSIONMANAGER_H
 #define SESSIONMANAGER_H
 
-#include <QObject>
+#include <QString>
+#include <QWidget>
 
 class SessionManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit SessionManager(QObject *parent = nullptr);
+    SessionManager(SessionManager const &s) = delete;
+    void operator=(SessionManager const &s) = delete;
 
-signals:
+    static SessionManager& getInstance(void);
 
-public slots:
+    void begin(void);
+    void authFinished(QString &authToken);
+
+private:
+    SessionManager() = default;
+    QWidget *curWindget_;
+    QString authToken_;
+    unsigned int showId_;
+    unsigned int stationId_;
 };
 
 #endif // SESSIONMANAGER_H
