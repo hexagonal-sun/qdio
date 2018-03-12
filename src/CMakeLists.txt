@@ -18,7 +18,8 @@ set(QDIO_SOURCES main.cpp
                  cartButton.cpp
                  restRequest.cpp
                  authDialog.cpp
-                 authManager.cpp)
+                 authManager.cpp
+                 sessionManager.cpp)
 
 add_executable(qdio ${QDIO_SOURCES})
 
