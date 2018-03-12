@@ -29,3 +29,8 @@ void SessionManager::authFinished(QString &authToken)
     curWindget_ = new CartsWindow;
     curWindget_->show();
 }
+
+const QString& SessionManager::getAuthToken(void) const
+{
+    return authToken_;
+}

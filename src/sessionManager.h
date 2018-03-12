@@ -15,6 +15,7 @@ public:
 
     void begin(void);
     void authFinished(QString &authToken);
+    const QString& getAuthToken(void) const;
 
 private:
     SessionManager() = default;
