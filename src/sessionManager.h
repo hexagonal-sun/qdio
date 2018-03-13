@@ -15,6 +15,8 @@ public:
 
     void begin(void);
     void authFinished(QString &authToken);
+    void showSelectionComplete(int showId);
+    void showSelectionCancelled();
     const QString& getAuthToken(void) const;
 
 private:
