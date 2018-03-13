@@ -21,7 +21,7 @@ public:
 
 private:
     SessionManager() = default;
-    QWidget *curWindget_;
+    QWidget *curWidget_;
     QString authToken_;
     unsigned int showId_;
     unsigned int stationId_;

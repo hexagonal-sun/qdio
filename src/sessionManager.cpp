@@ -11,42 +11,42 @@ SessionManager& SessionManager::getInstance(void)
 
 void SessionManager::begin(void)
 {
-    curWindget_ = new AuthDialog();
+    curWidget_ = new AuthDialog();
 
     authToken_ = "";
     showId_ = 0;
     stationId_ = 0;
 
-    curWindget_->show();
+    curWidget_->show();
 }
 
 void SessionManager::authFinished(QString &authToken)
 {
     authToken_ = authToken;
 
-    curWindget_->close();
-    curWindget_->deleteLater();
+    curWidget_->close();
+    curWidget_->deleteLater();
 
-    curWindget_ = new ShowDialog;
-    curWindget_->show();
+    curWidget_ = new ShowDialog;
+    curWidget_->show();
 }
 
 void SessionManager::showSelectionComplete(int showId)
 {
     showId_ = showId;
 
-    curWindget_->close();
-    curWindget_->deleteLater();
+    curWidget_->close();
+    curWidget_->deleteLater();
 
-    curWindget_ = new CartsWindow;
-    curWindget_->show();
+    curWidget_ = new CartsWindow;
+    curWidget_->show();
 }
 
 void SessionManager::showSelectionCancelled()
 {
-    curWindget_->close();
-    curWindget_->deleteLater();
-    curWindget_ = NULL;
+    curWidget_->close();
+    curWidget_->deleteLater();
+    curWidget_ = NULL;
 
     begin();
 }
