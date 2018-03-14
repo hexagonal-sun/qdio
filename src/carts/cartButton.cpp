@@ -8,6 +8,8 @@ CartButton::CartButton(QWidget *parent, QString text, QString file)
 {
     player_.setNotifyInterval(100);
 
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
     connect(this, &QPushButton::released, this, &CartButton::clicked);
 
     connect(&player_, &QMediaPlayer::positionChanged,
