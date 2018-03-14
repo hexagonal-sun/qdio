@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 2.8.11)
 project(carts)
 
 set(CARTS_SRCS cartButton.cpp
+               cartWall.cpp
                cartsWindow.cpp)
 
 add_library(carts STATIC ${CARTS_SRCS})
