@@ -2,6 +2,7 @@
 
 #include <QPushButton>
 #include <QMediaPlayer>
+#include <QPaintEvent>
 #include <QString>
 #include <QWidget>
 
@@ -18,6 +19,7 @@ private slots:
     void positionUpdate(qint64 pos);
 
 private:
+    void paintEvent(QPaintEvent *event);
     QMediaPlayer player_;
     QString cartFile;
     QString cartTitle_;

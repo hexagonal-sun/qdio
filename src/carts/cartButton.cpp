@@ -1,5 +1,6 @@
 #include "cartButton.h"
 #include <QDebug>
+#include <QPainter>
 
 CartButton::CartButton(QWidget *parent, QString text, QString file)
     : QPushButton(text, parent),
@@ -36,4 +37,25 @@ void CartButton::setCartTitle(const QString &text)
 {
     setText(text);
     cartTitle_ = text;
+}
+
+void CartButton::paintEvent(QPaintEvent *pe)
+{
+    QPainter painter(this);
+    QFont font = painter.font();
+    auto bgColour = isEnabled() ? Qt::darkBlue : Qt::black;
+    auto txtColour = isEnabled() ? Qt::white : Qt::gray;
+    QString displayText = isEnabled() ? text() : "Empty";
+
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setPen(QPen(Qt::green, 3));
+    painter.setBrush(bgColour);
+    painter.drawRect(pe->rect());
+
+    painter.setPen(QPen(txtColour));
+    font.setBold(true);
+    font.setPointSize(font.pointSize() * 1.5);
+    painter.setFont(font);
+
+    painter.drawText(pe->rect(), Qt::AlignCenter, displayText);
 }
