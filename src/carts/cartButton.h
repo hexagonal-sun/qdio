@@ -4,6 +4,7 @@
 #include <QMediaPlayer>
 #include <QPaintEvent>
 #include <QString>
+#include <QTimer>
 #include <QWidget>
 
 class CartButton : public QPushButton
@@ -17,10 +18,13 @@ public:
 private slots:
     void clicked();
     void positionUpdate(qint64 pos);
+    void flashTimeout();
 
 private:
     void paintEvent(QPaintEvent *event);
     QMediaPlayer player_;
     QString cartFile;
     QString cartTitle_;
+    QTimer flashTimer_;
+    bool redFlash_;
 };

@@ -5,7 +5,8 @@
 CartButton::CartButton(QWidget *parent, QString text, QString file)
     : QPushButton(text, parent),
       cartTitle_(text),
-      cartFile(file)
+      cartFile(file),
+      redFlash_(false)
 {
     player_.setNotifyInterval(100);
 
@@ -15,6 +16,9 @@ CartButton::CartButton(QWidget *parent, QString text, QString file)
 
     connect(&player_, &QMediaPlayer::positionChanged,
             this, &CartButton::positionUpdate);
+
+    connect(&flashTimer_, &QTimer::timeout,
+            this, &CartButton::flashTimeout);
 }
 
 void CartButton::clicked()
@@ -22,9 +26,12 @@ void CartButton::clicked()
     if (player_.state() == QMediaPlayer::StoppedState) {
         player_.setMedia(QUrl::fromLocalFile("/home/matthew/test.mp3"));
         player_.play();
+        flashTimer_.start(500);
     } else {
         player_.stop();
         setText(cartTitle_);
+        flashTimer_.stop();
+        redFlash_ = false;
     }
 }
 
@@ -39,6 +46,11 @@ void CartButton::setCartTitle(const QString &text)
     cartTitle_ = text;
 }
 
+void CartButton::flashTimeout()
+{
+    redFlash_ = !redFlash_;
+}
+
 void CartButton::paintEvent(QPaintEvent *pe)
 {
     QPainter painter(this);
@@ -46,6 +58,9 @@ void CartButton::paintEvent(QPaintEvent *pe)
     auto bgColour = isEnabled() ? Qt::darkBlue : Qt::black;
     auto txtColour = isEnabled() ? Qt::white : Qt::gray;
     QString displayText = isEnabled() ? text() : "Empty";
+
+    if (redFlash_)
+        bgColour = Qt::red;
 
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(QPen(Qt::green, 3));
