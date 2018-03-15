@@ -26,5 +26,6 @@ private:
     QString cartFile;
     QString cartTitle_;
     QTimer flashTimer_;
+    qint64 currentPosition_;
     bool redFlash_;
 };

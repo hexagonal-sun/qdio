@@ -6,6 +6,7 @@ CartButton::CartButton(QWidget *parent, QString text, QString file)
     : QPushButton(text, parent),
       cartTitle_(text),
       cartFile(file),
+      currentPosition_(0),
       redFlash_(false)
 {
     player_.setNotifyInterval(100);
@@ -37,7 +38,9 @@ void CartButton::clicked()
 
 void CartButton::positionUpdate(qint64 newpos)
 {
-    setText(QString::number(newpos));
+    currentPosition_ = newpos;
+
+    update();
 }
 
 void CartButton::setCartTitle(const QString &text)
