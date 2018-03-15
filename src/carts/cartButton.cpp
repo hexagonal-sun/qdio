@@ -20,12 +20,16 @@ CartButton::CartButton(QWidget *parent, QString text, QString file)
 
     connect(&flashTimer_, &QTimer::timeout,
             this, &CartButton::flashTimeout);
+
+    connect(&player_, &QMediaPlayer::durationChanged,
+            this, &CartButton::durationUpdate);
+
+    player_.setMedia(QUrl::fromLocalFile("/Users/matthew/test.mp3"));
 }
 
 void CartButton::clicked()
 {
     if (player_.state() == QMediaPlayer::StoppedState) {
-        player_.setMedia(QUrl::fromLocalFile("/home/matthew/test.mp3"));
         player_.play();
         flashTimer_.start(500);
     } else {
@@ -52,6 +56,13 @@ void CartButton::setCartTitle(const QString &text)
 void CartButton::flashTimeout()
 {
     redFlash_ = !redFlash_;
+}
+
+void CartButton::durationUpdate(qint64 newDuration)
+{
+    cartDuration_ = newDuration;
+
+    update();
 }
 
 void CartButton::paintEvent(QPaintEvent *pe)

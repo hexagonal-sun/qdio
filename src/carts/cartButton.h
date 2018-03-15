@@ -19,6 +19,7 @@ private slots:
     void clicked();
     void positionUpdate(qint64 pos);
     void flashTimeout();
+    void durationUpdate(qint64 newDuration);
 
 private:
     void paintEvent(QPaintEvent *event);
@@ -26,6 +27,7 @@ private:
     QString cartFile;
     QString cartTitle_;
     QTimer flashTimer_;
+    qint64 cartDuration_;
     qint64 currentPosition_;
     bool redFlash_;
 };
