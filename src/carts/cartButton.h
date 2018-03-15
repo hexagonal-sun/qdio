@@ -26,7 +26,6 @@ private:
     void paintEvent(QPaintEvent *event);
     QMediaPlayer player_;
     QString cartFile;
-    QString cartTitle_;
     QTimer flashTimer_;
     qint64 cartDuration_;
     qint64 currentPosition_;
