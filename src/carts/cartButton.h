@@ -1,13 +1,13 @@
 #pragma once
 
-#include <QPushButton>
+#include <QAbstractButton>
 #include <QMediaPlayer>
 #include <QPaintEvent>
 #include <QString>
 #include <QTimer>
 #include <QWidget>
 
-class CartButton : public QPushButton
+class CartButton : public QAbstractButton
 {
     Q_OBJECT
 

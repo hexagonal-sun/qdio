@@ -3,16 +3,18 @@
 #include <QPainter>
 
 CartButton::CartButton(QWidget *parent, QString text, QString file)
-    : QPushButton(text, parent),
+    : QAbstractButton(parent),
       cartFile(file),
       currentPosition_(0),
       redFlash_(false)
 {
     player_.setNotifyInterval(100);
 
+    setText(text);
+
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    connect(this, &QPushButton::released, this, &CartButton::clicked);
+    connect(this, &QAbstractButton::released, this, &CartButton::clicked);
 
     connect(&player_, &QMediaPlayer::positionChanged,
             this, &CartButton::positionUpdate);
