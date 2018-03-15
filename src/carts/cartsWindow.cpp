@@ -16,4 +16,9 @@ CartsWindow::CartsWindow(QWidget *parent) :
 
     mainWidget->setLayout(layout);
     setCentralWidget(mainWidget);
+
+    QPalette pal = palette();
+    pal.setColor(QPalette::Background, Qt::black);
+    setAutoFillBackground(true);
+    setPalette(pal);
 }
