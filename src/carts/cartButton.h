@@ -20,6 +20,7 @@ private slots:
     void positionUpdate(qint64 pos);
     void flashTimeout();
     void durationUpdate(qint64 newDuration);
+    const QString getCartText() const;
 
 private:
     void paintEvent(QPaintEvent *event);

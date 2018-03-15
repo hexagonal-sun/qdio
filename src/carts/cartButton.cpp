@@ -65,13 +65,25 @@ void CartButton::durationUpdate(qint64 newDuration)
     update();
 }
 
+const QString CartButton::getCartText() const
+{
+    qint64 timeLeft = cartDuration_ - currentPosition_;
+    QString ret;
+
+    if (!isEnabled())
+        return "Empty";
+
+    ret.sprintf("%s\n\n%0.1f", text().toStdString().c_str(), (double)timeLeft / 1000);
+
+    return ret;
+}
+
 void CartButton::paintEvent(QPaintEvent *pe)
 {
     QPainter painter(this);
     QFont font = painter.font();
     auto bgColour = isEnabled() ? Qt::darkBlue : Qt::black;
     auto txtColour = isEnabled() ? Qt::white : Qt::gray;
-    QString displayText = isEnabled() ? text() : "Empty";
 
     if (redFlash_)
         bgColour = Qt::red;
@@ -86,5 +98,5 @@ void CartButton::paintEvent(QPaintEvent *pe)
     font.setPointSize(font.pointSize() * 1.5);
     painter.setFont(font);
 
-    painter.drawText(pe->rect(), Qt::AlignCenter, displayText);
+    painter.drawText(pe->rect(), Qt::AlignCenter, getCartText());
 }
