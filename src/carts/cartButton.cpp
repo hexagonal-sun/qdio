@@ -28,16 +28,21 @@ CartButton::CartButton(QWidget *parent, QString text, QString file)
     player_.setMedia(QUrl::fromLocalFile("/Users/matthew/test.mp3"));
 }
 
+void CartButton::stop()
+{
+    player_.stop();
+    flashTimer_.stop();
+    currentPosition_ = 0;
+    redFlash_ = false;
+}
+
 void CartButton::clicked()
 {
     if (player_.state() == QMediaPlayer::StoppedState) {
         player_.play();
         flashTimer_.start(500);
-    } else {
-        player_.stop();
-        flashTimer_.stop();
-        redFlash_ = false;
-    }
+    } else
+        stop();
 }
 
 void CartButton::positionUpdate(qint64 newpos)

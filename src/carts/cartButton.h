@@ -24,6 +24,8 @@ private slots:
 
 private:
     void paintEvent(QPaintEvent *event);
+    void stop();
+
     QMediaPlayer player_;
     QString cartFile;
     QTimer flashTimer_;
