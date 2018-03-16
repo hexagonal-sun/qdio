@@ -8,9 +8,16 @@ CartButton::CartButton(QWidget *parent, QString text, QString file)
       currentPosition_(0),
       redFlash_(false)
 {
-    player_.setNotifyInterval(100);
+    QFont widgetFont = font();
+
+    widgetFont.setBold(true);
+    widgetFont.setPointSize(widgetFont.pointSize() * 1.5);
+
+    setFont(widgetFont);
 
     setText(text);
+
+    player_.setNotifyInterval(100);
 
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -89,7 +96,6 @@ const QString CartButton::getCartText() const
 void CartButton::paintEvent(QPaintEvent *pe)
 {
     QPainter painter(this);
-    QFont font = painter.font();
     auto bgColour = isEnabled() ? Qt::darkBlue : Qt::black;
     auto txtColour = isEnabled() ? Qt::white : Qt::gray;
 
@@ -102,9 +108,6 @@ void CartButton::paintEvent(QPaintEvent *pe)
     painter.drawRect(pe->rect());
 
     painter.setPen(QPen(txtColour));
-    font.setBold(true);
-    font.setPointSize(font.pointSize() * 1.5);
-    painter.setFont(font);
 
     painter.drawText(pe->rect(), Qt::AlignCenter, getCartText());
 }
