@@ -52,6 +52,33 @@ void CartButton::stop()
     redFlash_ = false;
 }
 
+const int CartButton::calculateMinimumWidth() const
+{
+    QFontMetrics widgetFontMetrics(font());
+
+    if (!isEnabled())
+       return widgetFontMetrics.width("Empty");
+
+    return widgetFontMetrics.width(text());
+}
+
+QSize CartButton::sizeHint() const
+{
+    QFontMetrics widgetFontInfo(font());
+
+    return QSize(calculateMinimumWidth() * 1.3,
+                 widgetFontInfo.height() * 4);
+}
+
+QSize CartButton::minimumSizeHint() const
+{
+    QFontMetrics widgetFontInfo(font());
+    int minimumWidth = widgetFontInfo.width(text());
+
+    return QSize(calculateMinimumWidth(),
+                 widgetFontInfo.height() * 3);
+}
+
 void CartButton::clicked()
 {
     if (player_.state() == QMediaPlayer::StoppedState) {

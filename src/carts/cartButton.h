@@ -26,6 +26,9 @@ private slots:
 private:
     void paintEvent(QPaintEvent *event);
     void stop();
+    const int calculateMinimumWidth() const;
+    QSize sizeHint() const;
+    QSize minimumSizeHint() const;
 
     QMediaPlayer player_;
     QString cartFile;
