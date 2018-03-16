@@ -25,7 +25,16 @@ CartButton::CartButton(QWidget *parent, QString text, QString file)
     connect(&player_, &QMediaPlayer::durationChanged,
             this, &CartButton::durationUpdate);
 
+    connect(&player_, &QMediaPlayer::mediaStatusChanged,
+            this, &CartButton::mediaStatusChanged);
+
     player_.setMedia(QUrl::fromLocalFile("/Users/matthew/test.mp3"));
+}
+
+void CartButton::mediaStatusChanged(const QMediaPlayer::MediaStatus newStatus)
+{
+    if (newStatus == QMediaPlayer::EndOfMedia)
+        stop();
 }
 
 void CartButton::stop()
