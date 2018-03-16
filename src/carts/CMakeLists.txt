@@ -4,7 +4,8 @@ project(carts)
 
 set(CARTS_SRCS cartButton.cpp
                cartWall.cpp
-               cartsWindow.cpp)
+               cartsWindow.cpp
+               controlButton.cpp)
 
 add_library(carts STATIC ${CARTS_SRCS})
 target_link_libraries(carts Qt5::Widgets Qt5::Multimedia)
