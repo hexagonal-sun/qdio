@@ -14,7 +14,7 @@ CartPageButton::CartPageButton(QWidget *parent, unsigned int pageNumber)
 
     setFont(widgetFont);
 
-    setText(QString(pageNumber));
+    setText(QString::number(pageNumber + 1));
 }
 
 QSize CartPageButton::sizeHint() const
