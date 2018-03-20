@@ -3,8 +3,9 @@
 
 #include <QWidget>
 #include <QGridLayout>
+#include <QStackedWidget>
 
-#include "cartButton.h"
+#include "cartPageButton.h"
 
 class CartWall : public QWidget
 {
@@ -12,11 +13,13 @@ class CartWall : public QWidget
 public:
     explicit CartWall(QWidget *parent = nullptr,
                       int cartWallId = 0);
+
 private:
     int cartWallId_;
     QGridLayout *gridLayout_;
-    std::vector<std::vector<CartButton *>> buttons;
-    static auto constexpr noCarts = 4 * 4; // 4 x 4 grid of carts.
+    QStackedWidget * createCartButtonStack(void);
+    std::vector<std::vector<QStackedWidget *>> buttonStacks;
+    std::vector<CartPageButton *>pageButtons;
 };
 
 #endif // CARTWALL_H
