@@ -15,6 +15,8 @@ CartPageButton::CartPageButton(QWidget *parent, unsigned int pageNumber)
     setFont(widgetFont);
 
     setText(QString::number(pageNumber + 1));
+
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
 QSize CartPageButton::sizeHint() const
