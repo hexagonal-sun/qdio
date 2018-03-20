@@ -17,6 +17,9 @@ CartPageButton::CartPageButton(QWidget *parent, unsigned int pageNumber)
     setText(QString::number(pageNumber + 1));
 
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    connect(this, &CartPageButton::clicked,
+            this, &CartPageButton::pageButtonClicked);
 }
 
 QSize CartPageButton::sizeHint() const
@@ -39,9 +42,30 @@ void CartPageButton::paintEvent(QPaintEvent *pe)
 {
     QPainter painter(this);
 
+    if (currentPage_)
+        painter.setBrush(Qt::darkGreen);
+
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(QPen(Qt::green, 3));
     painter.drawRect(pe->rect());
 
     painter.drawText(pe->rect(), Qt::AlignCenter, text());
+}
+
+void CartPageButton::pageButtonClicked()
+{
+    if (!currentPage_) {
+        emit pageChange(pageNumber_);
+        currentPage_ = true;
+    }
+}
+
+void CartPageButton::pageUpdate(int newPageNumber)
+{
+    if (newPageNumber == pageNumber_)
+        currentPage_ = true;
+    else
+        currentPage_ = false;
+
+    update();
 }
