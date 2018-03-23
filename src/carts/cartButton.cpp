@@ -73,7 +73,6 @@ QSize CartButton::sizeHint() const
 QSize CartButton::minimumSizeHint() const
 {
     QFontMetrics widgetFontInfo(font());
-    int minimumWidth = widgetFontInfo.width(text());
 
     return QSize(calculateMinimumWidth(),
                  widgetFontInfo.height() * 3);
