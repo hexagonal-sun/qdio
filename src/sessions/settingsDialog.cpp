@@ -3,8 +3,7 @@
 
 SettingsDialog::SettingsDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::SettingsDialog),
-    settings_("Qdio Ltd", "qdio")
+    ui(new Ui::SettingsDialog)
 {
     ui->setupUi(this);
     ui->editRestURL->setText(settings_.value("apiUrl").toString());
