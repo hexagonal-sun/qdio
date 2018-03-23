@@ -4,7 +4,8 @@ project(sessions)
 
 set(SESSIONS_SRCS authDialog.cpp
                   showDialog.cpp
-                  sessionManager.cpp)
+                  sessionManager.cpp
+                  settingsDialog.cpp)
 
 add_library(sessions STATIC ${SESSIONS_SRCS})
 target_link_libraries(sessions Qt5::Network Qt5::Widgets Qt5::Multimedia)
