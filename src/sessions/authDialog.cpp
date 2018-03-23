@@ -38,6 +38,8 @@ void AuthDialog::showSettingsDialog(void)
     SettingsDialog settingsDlg;
 
     settingsDlg.exec();
+
+    SessionManager::getInstance().reloadSettings();
 }
 
 void AuthDialog::authRequestFinished(const QJsonDocument &reply)
