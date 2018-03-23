@@ -14,7 +14,12 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
 void SettingsDialog::accepted()
 {
-    settings_.setValue("apiUrl", ui->editRestURL->text());
+    QString url = ui->editRestURL->text();
+
+    if (!url.endsWith('/'))
+        url.append("/");
+
+    settings_.setValue("apiUrl", url);
 
     accept();
 }
