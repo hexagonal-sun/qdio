@@ -1,8 +1,10 @@
 #include <QMessageBox>
 #include <QJsonObject>
+#include <QPushButton>
 
 #include "authDialog.h"
 #include "sessionManager.h"
+#include "settingsDialog.h"
 #include "ui_authDialog.h"
 
 AuthDialog::AuthDialog(QWidget *parent) :
@@ -14,6 +16,7 @@ AuthDialog::AuthDialog(QWidget *parent) :
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &AuthDialog::accepted);
     connect(&authRequest, &RestRequest::requestFinished, this, &AuthDialog::authRequestFinished);
     connect(&authRequest, &RestRequest::requestError, this, &AuthDialog::authError);
+    connect(ui->btnSettings, &QPushButton::pressed, this, &AuthDialog::showSettingsDialog);
 }
 
 void AuthDialog::accepted(void)
@@ -28,6 +31,13 @@ void AuthDialog::accepted(void)
     QJsonDocument document(record);
 
     authRequest.post(document);
+}
+
+void AuthDialog::showSettingsDialog(void)
+{
+    SettingsDialog settingsDlg;
+
+    settingsDlg.exec();
 }
 
 void AuthDialog::authRequestFinished(const QJsonDocument &reply)
