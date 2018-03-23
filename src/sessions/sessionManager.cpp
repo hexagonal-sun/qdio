@@ -1,3 +1,5 @@
+#include <QSettings>
+
 #include "authDialog.h"
 #include "sessionManager.h"
 #include "cartsWindow.h"
@@ -17,7 +19,16 @@ void SessionManager::begin(void)
     showId_ = 0;
     stationId_ = 0;
 
+    reloadSettings();
+
     curWidget_->show();
+}
+
+void SessionManager::reloadSettings(void)
+{
+    QSettings set;
+
+    apiUrl_ = set.value("apiUrl").toString();
 }
 
 void SessionManager::authFinished(QString &authToken)
@@ -54,4 +65,9 @@ void SessionManager::showSelectionCancelled()
 const QString& SessionManager::getAuthToken(void) const
 {
     return authToken_;
+}
+
+const QString &SessionManager::getApiURL(void) const
+{
+    return apiUrl_;
 }
