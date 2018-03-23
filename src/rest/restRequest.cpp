@@ -17,7 +17,7 @@ RestRequest::RestRequest(const QString requestUrl,
 
 void RestRequest::get(void)
 {
-    QUrl url("http://localhost:8000/" + requestUrl_);
+    QUrl url(SessionManager::getInstance().getApiURL() + requestUrl_);
 
     QNetworkRequest request(url);
 
@@ -30,7 +30,7 @@ void RestRequest::get(void)
 
 void RestRequest::post(QJsonDocument json)
 {
-    QUrl url("http://localhost:8000/" + requestUrl_);
+    QUrl url(SessionManager::getInstance().getApiURL() + requestUrl_);
     QNetworkRequest request(url);
 
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
