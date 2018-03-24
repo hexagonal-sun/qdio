@@ -4,9 +4,65 @@
 
 CartButton::CartButton(QWidget *parent, QString text, QString file)
     : QAbstractButton(parent),
-      cartFile(file),
-      currentPosition_(0),
+      cartState_(LOADING),
       redFlash_(false)
+{
+    setupAppearance();
+    setText(text);
+
+    audioManager_ = new CartAudioManager(this, "/home/matthew/test.mp3");
+
+    connect(audioManager_, &CartAudioManager::decodingComplete,
+            [=]{ cartState_ = READY; setEnabled(true); });
+
+    connect(audioManager_, &CartAudioManager::decodingError,
+            [=]{ cartState_ = ERROR; });
+
+    // When we recieve a duration update, update() the widget so that
+    // the new duration is painted.
+    connect(audioManager_, &CartAudioManager::durationUpdate,
+            [=]{ update(); });
+
+    connect(audioManager_, &CartAudioManager::positionUpdate,
+            [=]{ update(); });
+
+    connect(audioManager_, &CartAudioManager::playbackFinished,
+            [=]{ stopAndReset(); });
+
+    connect(this, &QAbstractButton::released,
+            this, &CartButton::clicked);
+
+    connect(&flashTimer_, &QTimer::timeout,
+            this, &CartButton::flashTimeout);
+}
+
+CartButton::CartButton(QWidget *parent)
+    : QAbstractButton(parent),
+      cartState_(EMPTY),
+      redFlash_(false)
+{
+    setupAppearance();
+}
+
+void CartButton::clicked()
+{
+    if (audioManager_->isPlaying())
+        stopAndReset();
+    else {
+        audioManager_->play();
+        flashTimer_.start(500);
+    }
+}
+
+void CartButton::stopAndReset(void)
+{
+    audioManager_->stop();
+    flashTimer_.stop();
+    redFlash_ = false;
+    update();
+}
+
+void CartButton::setupAppearance(void)
 {
     QFont widgetFont = font();
 
@@ -15,51 +71,14 @@ CartButton::CartButton(QWidget *parent, QString text, QString file)
 
     setFont(widgetFont);
 
-    setText(text);
-
-    player_.setNotifyInterval(100);
-
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-    connect(this, &QAbstractButton::released, this, &CartButton::clicked);
-
-    connect(&player_, &QMediaPlayer::positionChanged,
-            this, &CartButton::positionUpdate);
-
-    connect(&flashTimer_, &QTimer::timeout,
-            this, &CartButton::flashTimeout);
-
-    connect(&player_, &QMediaPlayer::durationChanged,
-            this, &CartButton::durationUpdate);
-
-    connect(&player_, &QMediaPlayer::mediaStatusChanged,
-            this, &CartButton::mediaStatusChanged);
-
-    player_.setMedia(QUrl::fromLocalFile("/Users/matthew/test.mp3"));
-}
-
-void CartButton::mediaStatusChanged(const QMediaPlayer::MediaStatus newStatus)
-{
-    if (newStatus == QMediaPlayer::EndOfMedia)
-        stop();
-}
-
-void CartButton::stop()
-{
-    player_.stop();
-    flashTimer_.stop();
-    currentPosition_ = 0;
-    redFlash_ = false;
 }
 
 const int CartButton::calculateMinimumWidth() const
 {
     QFontMetrics widgetFontMetrics(font());
 
-    if (!isEnabled())
-       return widgetFontMetrics.width("Empty");
-
-    return widgetFontMetrics.width(text());
+    return widgetFontMetrics.width(getCartText());
 }
 
 QSize CartButton::sizeHint() const
@@ -78,52 +97,47 @@ QSize CartButton::minimumSizeHint() const
                  widgetFontInfo.height() * 3);
 }
 
-void CartButton::clicked()
-{
-    if (player_.state() == QMediaPlayer::StoppedState) {
-        player_.play();
-        flashTimer_.start(500);
-    } else
-        stop();
-}
-
-void CartButton::positionUpdate(qint64 newpos)
-{
-    currentPosition_ = newpos;
-
-    update();
-}
-
 void CartButton::flashTimeout()
 {
     redFlash_ = !redFlash_;
 }
 
-void CartButton::durationUpdate(qint64 newDuration)
-{
-    cartDuration_ = newDuration;
-
-    update();
-}
-
 const QString CartButton::getCartText() const
 {
-    qint64 timeLeft = cartDuration_ - currentPosition_;
     QString ret;
 
-    if (!isEnabled())
+    switch (cartState_)
+    {
+    case LOADING:
+        return "Loading";
+    case EMPTY:
         return "Empty";
+    case ERROR:
+        return "Load Error";
+    case READY:
+    {
+        QString ret;
+        qint64 timeLeft = audioManager_->getAudioDuration() -
+            audioManager_->getAudioPosition();
 
-    ret.sprintf("%s\n\n%0.1f", text().toStdString().c_str(), (double)timeLeft / 1000);
+        ret.sprintf("%s\n\n%0.1f", text().toStdString().c_str(),
+                    (double)timeLeft / 1000);
 
-    return ret;
+        return ret;
+    }
+    }
+}
+
+bool CartButton::isReady(void) const
+{
+    return cartState_ == READY;
 }
 
 void CartButton::paintEvent(QPaintEvent *pe)
 {
     QPainter painter(this);
-    auto bgColour = isEnabled() ? Qt::darkBlue : Qt::black;
-    auto txtColour = isEnabled() ? Qt::white : Qt::gray;
+    auto bgColour = isReady() ? Qt::darkBlue : Qt::black;
+    auto txtColour = isReady() ? Qt::white : Qt::gray;
 
     if (redFlash_)
         bgColour = Qt::red;
