@@ -3,8 +3,12 @@
 AudioManager::AudioManager(QObject *parent,
                            unsigned int noMediaPlayers) : QObject(parent)
 {
-    for (size_t i = 0; i < noMediaPlayers; i++)
-        mediaPlayers_.push(new QMediaPlayer(this));
+    for (size_t i = 0; i < noMediaPlayers; i++) {
+        QMediaPlayer *mp = new QMediaPlayer(this);
+
+        mp->setNotifyInterval(100);
+        mediaPlayers_.push(mp);
+    }
 }
 
 QMediaPlayer* AudioManager::acquireMediaPlayer(void)
