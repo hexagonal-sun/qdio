@@ -1,9 +1,12 @@
 #ifndef AUDIOMANAGER_H
 #define AUDIOMANAGER_H
 
-#include <QObject>
+#include <functional>
 #include <queue>
+#include <QObject>
 #include <QMediaPlayer>
+
+typedef std::pair<QString, std::function<void(qint64)>> durationRequest;
 
 class AudioManager : public QObject
 {
@@ -14,12 +17,12 @@ public:
 
     QMediaPlayer* acquireMediaPlayer(void);
     void releaseMediaPlayer(QMediaPlayer *player);
-signals:
-
-public slots:
+    void obtainDuration(QString file, std::function<void(qint64)> callback);
 
 private:
     std::queue<QMediaPlayer *> mediaPlayers_;
+    void serviceDurationRequest(QMediaPlayer *mp, durationRequest req);
+    std::queue<durationRequest> pendingDurationRequests;
 };
 
 #endif // AUDIOMANAGER_H
