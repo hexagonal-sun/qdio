@@ -20,6 +20,15 @@ CartButton::CartButton(QWidget *parent, QString text, QString file,
 
     connect(&flashTimer_, &QTimer::timeout,
             this, &CartButton::flashTimeout);
+
+    audioMan->obtainDuration("/home/matthew/test.mp3",
+                             [=](qint64 newDuration)
+        {
+            duration_ = newDuration;
+            setEnabled(true);
+            cartState_ = READY;
+            update();
+        });
 }
 
 CartButton::CartButton(QWidget *parent)
