@@ -14,7 +14,7 @@ AudioManager::AudioManager(QObject *parent,
 QMediaPlayer* AudioManager::acquireMediaPlayer(void)
 {
     if (mediaPlayers_.empty())
-        return NULL;
+        return nullptr;
 
     QMediaPlayer *ret = mediaPlayers_.front();
     mediaPlayers_.pop();
