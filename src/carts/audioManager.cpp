@@ -32,6 +32,7 @@ void AudioManager::releaseMediaPlayer(QMediaPlayer *player)
         pendingDurationRequests.pop();
 
         serviceDurationRequest(player, request);
+        return;
     }
 
     mediaPlayers_.push(player);
