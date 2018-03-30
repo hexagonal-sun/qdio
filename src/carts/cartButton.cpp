@@ -2,32 +2,16 @@
 #include <QDebug>
 #include <QPainter>
 
-CartButton::CartButton(QWidget *parent, QString text, QString file)
+CartButton::CartButton(QWidget *parent, QString text, QString file,
+                       AudioManager *audioMan)
     : QAbstractButton(parent),
       cartState_(LOADING),
+      mediaPlayer_(nullptr),
+      audioMan_(audioMan),
       redFlash_(false)
 {
     setupAppearance();
     setText(text);
-
-    audioManager_ = new CartAudioManager(this, "/home/matthew/test.mp3");
-
-    connect(audioManager_, &CartAudioManager::decodingComplete,
-            [=]{ cartState_ = READY; setEnabled(true); });
-
-    connect(audioManager_, &CartAudioManager::decodingError,
-            [=]{ cartState_ = ERROR; });
-
-    // When we recieve a duration update, update() the widget so that
-    // the new duration is painted.
-    connect(audioManager_, &CartAudioManager::durationUpdate,
-            [=]{ update(); });
-
-    connect(audioManager_, &CartAudioManager::positionUpdate,
-            [=]{ update(); });
-
-    connect(audioManager_, &CartAudioManager::playbackFinished,
-            [=]{ stopAndReset(); });
 
     connect(this, &QAbstractButton::released,
             this, &CartButton::clicked);
@@ -46,19 +30,38 @@ CartButton::CartButton(QWidget *parent)
 
 void CartButton::clicked()
 {
-    if (audioManager_->isPlaying())
-        stopAndReset();
-    else {
-        audioManager_->play();
-        flashTimer_.start(500);
-    }
+    QMediaPlayer *mp = audioMan_->acquireMediaPlayer();
+
+    if (!mp)
+        return;
+
+    mp->setMedia(QUrl::fromLocalFile("/home/matthew/test.mp3"));
+
+    // When we recieve a duration update, update() the widget so that
+    // the new duration is painted.
+    connect(mp, &QMediaPlayer::durationChanged,
+            [=](qint64 newDuration){ duration_ = newDuration; update(); });
+
+    connect(mp, &QMediaPlayer::positionChanged,
+            [=](qint64 newPosition){ position_ = newPosition; });
+
+    connect(mp, &QMediaPlayer::stateChanged,
+            [=](QMediaPlayer::State newState)
+    {
+        if (newState == QMediaPlayer::StoppedState)
+            stopAndReset();
+    });
+
+    mp->play();
 }
 
 void CartButton::stopAndReset(void)
 {
-    audioManager_->stop();
+    mediaPlayer_->stop();
     flashTimer_.stop();
     redFlash_ = false;
+    audioMan_->releaseMediaPlayer(mediaPlayer_);
+    mediaPlayer_ = nullptr;
     update();
 }
 
@@ -117,8 +120,7 @@ const QString CartButton::getCartText() const
     case READY:
     {
         QString ret;
-        qint64 timeLeft = audioManager_->getAudioDuration() -
-            audioManager_->getAudioPosition();
+        qint64 timeLeft = duration_ - position_;
 
         ret.sprintf("%s\n\n%0.1f", text().toStdString().c_str(),
                     (double)timeLeft / 1000);

@@ -7,6 +7,7 @@
 #include <QTimer>
 #include <QWidget>
 
+#include "audioManager.h"
 #include "cartAudioManager.h"
 
 class CartButton : public QAbstractButton
@@ -14,7 +15,7 @@ class CartButton : public QAbstractButton
     Q_OBJECT
 
 public:
-    CartButton(QWidget *parent, QString text, QString file);
+    CartButton(QWidget *parent, QString text, QString file, AudioManager *audioMan);
     CartButton(QWidget *parent);
     void setCartTitle(const QString &text);
 
@@ -31,10 +32,13 @@ private:
     QSize sizeHint() const;
     QSize minimumSizeHint() const;
     bool isReady(void) const;
+    qint64 duration_;
+    qint64 position_;
+    AudioManager *audioMan_;
+    QMediaPlayer *mediaPlayer_;
 
     QTimer flashTimer_;
     bool redFlash_;
-    CartAudioManager *audioManager_;
 
     enum {
         LOADING,

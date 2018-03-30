@@ -67,7 +67,7 @@ QStackedWidget * CartWall::createCartButtonStack(AudioManager *audioMan)
     QStackedWidget *ret = new QStackedWidget(this);
 
     for (auto page = 0; page < NO_PAGES; page++) {
-        auto btn = new CartButton(this, "foo", "bar");
+        auto btn = new CartButton(this, "foo", "bar", audioMan);
 
         btn->setEnabled(false);
 
