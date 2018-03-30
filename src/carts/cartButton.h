@@ -8,7 +8,6 @@
 #include <QWidget>
 
 #include "audioManager.h"
-#include "cartAudioManager.h"
 
 class CartButton : public QAbstractButton
 {

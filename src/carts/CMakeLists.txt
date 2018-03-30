@@ -7,7 +7,6 @@ set(CARTS_SRCS cartButton.cpp
                cartsWindow.cpp
                controlButton.cpp
                cartPageButton.cpp
-               cartAudioManager.cpp
                audioManager.cpp)
 
 add_library(carts STATIC ${CARTS_SRCS})
