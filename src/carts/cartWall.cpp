@@ -7,7 +7,7 @@ auto constexpr LHS_PAGE_COL = 0;
 auto constexpr RHS_PAGE_COL = NO_CART_COLS + 1;
 auto constexpr NO_PAGES = NO_CART_ROWS * 2;
 
-CartWall::CartWall(QWidget *parent, int cartWallId)
+CartWall::CartWall(AudioManager *audioMan, QWidget *parent, int cartWallId)
     : QWidget(parent),
       cartWallId_(cartWallId)
 {
@@ -39,7 +39,7 @@ CartWall::CartWall(QWidget *parent, int cartWallId)
         std::vector<QStackedWidget *>buttonCol;
 
         for (auto y = 0; y < NO_CART_ROWS; y++) {
-            QStackedWidget *buttonStack = createCartButtonStack();
+            QStackedWidget *buttonStack = createCartButtonStack(audioMan);
 
             gridLayout_->addWidget(buttonStack, y, x + 1);
 
@@ -62,7 +62,7 @@ CartWall::CartWall(QWidget *parent, int cartWallId)
     setLayout(gridLayout_);
 }
 
-QStackedWidget * CartWall::createCartButtonStack(void)
+QStackedWidget * CartWall::createCartButtonStack(AudioManager *audioMan)
 {
     QStackedWidget *ret = new QStackedWidget(this);
 

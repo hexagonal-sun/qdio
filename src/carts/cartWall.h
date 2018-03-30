@@ -6,18 +6,19 @@
 #include <QStackedWidget>
 
 #include "cartPageButton.h"
+#include "audioManager.h"
 
 class CartWall : public QWidget
 {
     Q_OBJECT
 public:
-    explicit CartWall(QWidget *parent = nullptr,
+    explicit CartWall(AudioManager *audioMan, QWidget *parent = nullptr,
                       int cartWallId = 0);
 
 private:
     int cartWallId_;
     QGridLayout *gridLayout_;
-    QStackedWidget * createCartButtonStack(void);
+    QStackedWidget * createCartButtonStack(AudioManager *audioMan);
     std::vector<std::vector<QStackedWidget *>> buttonStacks;
     std::vector<CartPageButton *>pageButtons;
 };

@@ -11,8 +11,8 @@ CartsWindow::CartsWindow(QWidget *parent) :
     AudioManager *audioMan = new AudioManager(this);
     QVBoxLayout *layout = new QVBoxLayout(this);
     QHBoxLayout *controlButtonLayout = new QHBoxLayout(this);
-    CartWall *topCartWall = new CartWall(this, 0);
-    CartWall *bottomCartWall = new CartWall(this, 1);
+    CartWall *topCartWall = new CartWall(audioMan, this, 0);
+    CartWall *bottomCartWall = new CartWall(audioMan, this, 1);
     QWidget *mainWidget = new QWidget(this);
     ControlButton *logoutButton = new ControlButton(this);
     ControlButton *stopAllButton = new ControlButton(this);
