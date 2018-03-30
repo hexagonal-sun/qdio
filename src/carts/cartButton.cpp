@@ -6,6 +6,8 @@ CartButton::CartButton(QWidget *parent, QString text, QString file,
                        AudioManager *audioMan)
     : QAbstractButton(parent),
       cartState_(LOADING),
+      position_(0),
+      duration_(0),
       mediaPlayer_(nullptr),
       audioMan_(audioMan),
       redFlash_(false)
