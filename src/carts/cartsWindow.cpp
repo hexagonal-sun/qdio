@@ -3,10 +3,12 @@
 #include "cartsWindow.h"
 #include "controlButton.h"
 #include "cartWall.h"
+#include "audioManager.h"
 
 CartsWindow::CartsWindow(QWidget *parent) :
     QMainWindow(parent)
 {
+    AudioManager *audioMan = new AudioManager(this);
     QVBoxLayout *layout = new QVBoxLayout(this);
     QHBoxLayout *controlButtonLayout = new QHBoxLayout(this);
     CartWall *topCartWall = new CartWall(this, 0);
