@@ -40,12 +40,15 @@ void AudioManager::releaseMediaPlayer(QMediaPlayer *player)
 
 void AudioManager::serviceDurationRequest(QMediaPlayer *mp, durationRequest req)
 {
-    connect(mp, &QMediaPlayer::durationChanged,
-            [=](qint64 newDuration)
-            {
-                req.second(newDuration);
-                releaseMediaPlayer(mp);
-            });
+    connect(mp, &QMediaPlayer::mediaStatusChanged,
+            [=](QMediaPlayer::MediaStatus status)
+    {
+        if (status != QMediaPlayer::LoadedMedia)
+            return;
+
+        req.second(mp->duration());
+        releaseMediaPlayer(mp);
+    });
 
     mp->setMedia(QUrl::fromLocalFile(req.first));
 }
