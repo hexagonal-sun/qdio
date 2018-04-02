@@ -3,6 +3,7 @@
 
 #include <QAbstractButton>
 #include <QPaintEvent>
+#include <QTimer>
 
 class CartPageButton : public QAbstractButton
 {
@@ -14,6 +15,8 @@ signals:
 
 public slots:
     void pageUpdate(int newPageNumber);
+    void cartPlaybackStarted();
+    void cartPlaybackStopped();
 
 private slots:
     void pageButtonClicked();
@@ -23,7 +26,10 @@ private:
     QSize minimumSizeHint() const;
     void paintEvent(QPaintEvent *pe);
     unsigned int pageNumber_;
+    unsigned int noCartsPlaying_;
     bool currentPage_;
+    bool redFlash_;
+    QTimer flashTimer_;
 };
 
 #endif // CARTPAGEBUTTON_H

@@ -5,6 +5,8 @@
 
 CartPageButton::CartPageButton(QWidget *parent, unsigned int pageNumber)
     : QAbstractButton(parent),
+      redFlash_(false),
+      noCartsPlaying_(0),
       pageNumber_(pageNumber)
 {
     QFont widgetFont = font();
@@ -20,6 +22,12 @@ CartPageButton::CartPageButton(QWidget *parent, unsigned int pageNumber)
 
     connect(this, &CartPageButton::clicked,
             this, &CartPageButton::pageButtonClicked);
+
+    connect(&flashTimer_, &QTimer::timeout, [=]
+    {
+        redFlash_ = !redFlash_;
+        update();
+    });
 }
 
 QSize CartPageButton::sizeHint() const
@@ -38,11 +46,30 @@ QSize CartPageButton::minimumSizeHint() const
                  widgetFontInfo.height() * 2);
 }
 
+void CartPageButton::cartPlaybackStarted()
+{
+    if (!noCartsPlaying_++)
+        flashTimer_.start(500);
+}
+
+void CartPageButton::cartPlaybackStopped()
+{
+    if (!--noCartsPlaying_) {
+        flashTimer_.stop();
+        redFlash_ = false;
+        update();
+    }
+}
+
 void CartPageButton::paintEvent(QPaintEvent *pe)
 {
     QPainter painter(this);
 
-    if (currentPage_)
+    if (redFlash_)
+        painter.setBrush(Qt::red);
+
+    // If this is the current page, don't bother showing a red flash.
+    if(currentPage_)
         painter.setBrush(Qt::darkGreen);
 
     painter.setRenderHint(QPainter::Antialiasing);
