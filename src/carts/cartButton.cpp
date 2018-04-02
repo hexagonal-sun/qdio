@@ -68,6 +68,7 @@ void CartButton::clicked()
 
     mediaPlayer_->play();
     flashTimer_.start(500);
+    emit cartPlaybackStrarted();
 }
 
 void CartButton::stopAndReset(void)
@@ -81,6 +82,8 @@ void CartButton::stopAndReset(void)
 
     position_ = 0;
     update();
+
+    emit cartPlaybackStopped();
 }
 
 void CartButton::setupAppearance(void)

@@ -18,6 +18,10 @@ public:
     CartButton(QWidget *parent);
     void setCartTitle(const QString &text);
 
+signals:
+    void cartPlaybackStrarted();
+    void cartPlaybackStopped();
+
 private slots:
     void flashTimeout();
     void clicked();
