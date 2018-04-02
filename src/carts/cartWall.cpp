@@ -12,15 +12,25 @@ CartWall::CartWall(AudioManager *audioMan, QWidget *parent, int cartWallId)
       cartWallId_(cartWallId)
 {
     gridLayout_= new QGridLayout(this);
+    enum class pageButtonColumn {
+        LHS,
+        RHS
+    };
 
-    for (auto page = 0; page < NO_CART_ROWS; page++) {
-        auto lhsPageButton = new CartPageButton(this, page);
-        auto rhsPageButton = new CartPageButton(this, page + NO_CART_ROWS);
+    for (const auto pageColumn : {pageButtonColumn::LHS, pageButtonColumn::RHS}) {
+        for (auto page = 0; page < NO_CART_ROWS; page++) {
+            const auto pageNumber = pageColumn == pageButtonColumn::RHS ?
+                        page + NO_CART_ROWS :
+                        page;
+            const auto gridLayoutColumn = pageColumn == pageButtonColumn::RHS ?
+                        RHS_PAGE_COL :
+                        LHS_PAGE_COL;
 
-        gridLayout_->addWidget(lhsPageButton, page, LHS_PAGE_COL);
-        gridLayout_->addWidget(rhsPageButton, page, RHS_PAGE_COL);
-        pageButtons.push_back(lhsPageButton);
-        pageButtons.push_back(rhsPageButton);
+            auto pageButton = new CartPageButton(this, pageNumber);
+
+            gridLayout_->addWidget(pageButton, page, gridLayoutColumn);
+            pageButtons.push_back(pageButton);
+        }
     }
 
     // Connect page change events as page updates to all other buttons
