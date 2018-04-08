@@ -7,6 +7,8 @@
 
 CartModel::CartModel(QObject *parent)
     : QObject(parent),
+      showCartsReady_(false),
+      stationCartsReady_(false),
       cartWallTypeMap_({ { CartWallType::STATION, stationCarts_ },
                          { CartWallType::SHOW, showCarts_ },
                          { CartWallType::USER, userCarts_ } })
