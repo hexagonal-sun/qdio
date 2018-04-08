@@ -63,6 +63,14 @@ CartButton *CartModel::getButton(const enum CartWallType &cartWall,
                           cart->second.theme.bgColour);
 }
 
+void CartModel::requestError(const QString &errorString,
+                             QNetworkReply::NetworkError error) const
+{
+    QString modelErrorString = "Error getting carts configuration: " + errorString;
+
+    emit modelError(modelErrorString);
+}
+
 bool CartModel::isReady() const
 {
     return showCartsReady_ && stationCartsReady_;

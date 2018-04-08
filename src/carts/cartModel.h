@@ -70,12 +70,16 @@ public:
 
 signals:
     void modelReady() const;
+    void modelError(const QString error) const;
 
 private slots:
     void processCarts(const QJsonDocument &data, cartMap &destMap,
                          std::function<void ()> callback);
     void processCartWall(const QJsonDocument &data, cartMap &destMap,
                          std::function<void()> callback);
+
+    void requestError(const QString &errorString,
+                      QNetworkReply::NetworkError error) const;
 
 private:
     void stationCartsReady(void);
