@@ -30,6 +30,18 @@ void RestRequest::get(void)
     netManager_.get(request);
 }
 
+void RestRequest::doGetRequest(const QString url, bool requiresAuth,
+                               QObject *parent, successCallback_t successCallback,
+                               errorCallback_t errorCallback)
+{
+    RestRequest *newRequest = new RestRequest(url, requiresAuth, parent);
+
+    connect(newRequest, &RestRequest::requestFinished, successCallback);
+    connect(newRequest, &RestRequest::requestError, errorCallback);
+
+    newRequest->get();
+}
+
 void RestRequest::post(QJsonDocument json)
 {
     QUrl url(SessionManager::getInstance().getApiURL() + requestUrl_);

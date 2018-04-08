@@ -6,6 +6,9 @@
 #include <QObject>
 #include <QString>
 
+typedef std::function<void (const QJsonDocument &)> successCallback_t;
+typedef std::function<void (const QString &, QNetworkReply::NetworkError)> errorCallback_t;
+
 class RestRequest : public QObject
 {
     Q_OBJECT
@@ -15,6 +18,11 @@ public:
                          QObject *parent = nullptr);
     void get(void);
     void post(QJsonDocument payload);
+
+    static void doGetRequest(const QString url,
+                             bool requiresAuth, QObject *parent,
+                             successCallback_t tfinishedCallback,
+                             errorCallback_t errorCallback);
 
 signals:
     void requestFinished(const QJsonDocument &restData);
