@@ -7,7 +7,8 @@ set(CARTS_SRCS cartButton.cpp
                cartsWindow.cpp
                controlButton.cpp
                cartPageButton.cpp
-               audioManager.cpp)
+               audioManager.cpp
+               cartModel.cpp)
 
 add_library(carts STATIC ${CARTS_SRCS})
 target_link_libraries(carts Qt5::Widgets Qt5::Multimedia)
