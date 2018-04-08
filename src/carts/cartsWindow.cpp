@@ -5,6 +5,7 @@
 #include "cartWall.h"
 #include "audioManager.h"
 #include "cartModel.h"
+#include "sessionManager.h"
 
 CartsWindow::CartsWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -21,6 +22,9 @@ CartsWindow::CartsWindow(QWidget *parent) :
 
     logoutButton->setText("Logout");
     stopAllButton->setText("Stop All");
+
+    connect(logoutButton, &QPushButton::released,
+            [=]{ SessionManager::getInstance().logout(); });
 
     controlButtonLayout->addStretch();
     controlButtonLayout->addWidget(logoutButton);
