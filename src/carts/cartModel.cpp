@@ -56,7 +56,9 @@ CartButton *CartModel::getButton(const enum CartWallType &cartWall,
     if (cart == stationCarts_.end())
         return new CartButton(parent);
 
-    return new CartButton(parent, cart->second.title, "foo", audioMan);
+    return new CartButton(parent, cart->second.title, "foo", audioMan,
+                          cart->second.theme.textColour,
+                          cart->second.theme.bgColour);
 }
 
 bool CartModel::isReady() const
