@@ -4,15 +4,17 @@
 #include "controlButton.h"
 #include "cartWall.h"
 #include "audioManager.h"
+#include "cartModel.h"
 
 CartsWindow::CartsWindow(QWidget *parent) :
     QMainWindow(parent)
 {
+    CartModel *cartModel = new CartModel(this);
     AudioManager *audioMan = new AudioManager(this);
     QVBoxLayout *layout = new QVBoxLayout(this);
     QHBoxLayout *controlButtonLayout = new QHBoxLayout(this);
-    CartWall *topCartWall = new CartWall(audioMan, this, 0);
-    CartWall *bottomCartWall = new CartWall(audioMan, this, 1);
+    CartWall *topCartWall = new CartWall(audioMan, cartModel, CartWallType::STATION, this);
+    CartWall *bottomCartWall = new CartWall(audioMan, cartModel, CartWallType::SHOW, this);
     QWidget *mainWidget = new QWidget(this);
     ControlButton *logoutButton = new ControlButton(this);
     ControlButton *stopAllButton = new ControlButton(this);
