@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <queue>
+#include <set>
 #include <QObject>
 #include <QMediaPlayer>
 
@@ -18,9 +19,11 @@ public:
     QMediaPlayer* acquireMediaPlayer(void);
     void releaseMediaPlayer(QMediaPlayer *player);
     void obtainDuration(QString file, std::function<void(qint64)> callback);
+    void stopAll(void);
 
 private:
-    std::queue<QMediaPlayer *> mediaPlayers_;
+    std::set<QMediaPlayer *> allMediaPlayers_;
+    std::queue<QMediaPlayer *> ownedMediaPlayers_;
     void serviceDurationRequest(QMediaPlayer *mp, durationRequest req);
     std::queue<durationRequest> pendingDurationRequests;
 };

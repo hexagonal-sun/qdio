@@ -7,17 +7,18 @@ AudioManager::AudioManager(QObject *parent,
         QMediaPlayer *mp = new QMediaPlayer(this);
 
         mp->setNotifyInterval(100);
-        mediaPlayers_.push(mp);
+        allMediaPlayers_.insert(mp);
+        ownedMediaPlayers_.push(mp);
     }
 }
 
 QMediaPlayer* AudioManager::acquireMediaPlayer(void)
 {
-    if (mediaPlayers_.empty())
+    if (ownedMediaPlayers_.empty())
         return nullptr;
 
-    QMediaPlayer *ret = mediaPlayers_.front();
-    mediaPlayers_.pop();
+    QMediaPlayer *ret = ownedMediaPlayers_.front();
+    ownedMediaPlayers_.pop();
 
     return ret;
 }
@@ -35,7 +36,13 @@ void AudioManager::releaseMediaPlayer(QMediaPlayer *player)
         return;
     }
 
-    mediaPlayers_.push(player);
+    ownedMediaPlayers_.push(player);
+}
+
+void AudioManager::stopAll()
+{
+    for (auto mediaPlayer : allMediaPlayers_)
+        mediaPlayer->stop();
 }
 
 void AudioManager::serviceDurationRequest(QMediaPlayer *mp, durationRequest req)
