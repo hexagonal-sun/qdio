@@ -62,6 +62,14 @@ void SessionManager::showSelectionCancelled()
     begin();
 }
 
+void SessionManager::logout()
+{
+    curWidget_->close();
+    curWidget_->deleteLater();
+
+    begin();
+}
+
 const QString& SessionManager::getAuthToken(void) const
 {
     return authToken_;

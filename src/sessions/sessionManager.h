@@ -18,6 +18,7 @@ public:
     void showSelectionComplete(int showId);
     void showSelectionCancelled();
     void reloadSettings(void);
+    void logout(void);
     const QString& getAuthToken(void) const;
     const QString& getApiURL(void) const;
     const unsigned int getShowId(void) const;
