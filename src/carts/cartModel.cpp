@@ -5,6 +5,8 @@
 #include "cartModel.h"
 #include "sessionManager.h"
 
+using namespace std::placeholders;
+
 CartModel::CartModel(QObject *parent)
     : QObject(parent),
       showCartsReady_(false),
@@ -16,31 +18,20 @@ CartModel::CartModel(QObject *parent)
     unsigned int showId = SessionManager::getInstance().getShowId();
     QString showIdString = QString::number(showId);
 
-    RestRequest *stationCartWallRequest =
-        new RestRequest("api/qdio/stationcartwalls/1/",
-                        true, this);
-
-    RestRequest *showCartWallRequest =
-        new RestRequest("api/qdio/showcartwalls/" + showIdString + "/",
-                        true, this);
-
-    auto stationProcessor = std::bind(&CartModel::processCartWall, this,
-                                      std::placeholders::_1,
+    auto stationProcessor = std::bind(&CartModel::processCartWall, this, _1,
                                       std::ref(stationCarts_),
                                       [=]{stationCartsReady();});
 
-    auto showProcessor = std::bind(&CartModel::processCartWall, this,
-                                   std::placeholders::_1, std::ref(showCarts_),
-                                   [=]{showCartsReady();});
+    auto showProcessor = std::bind(&CartModel::processCartWall, this, _1,
+                                   std::ref(showCarts_), [=]{showCartsReady();});
 
-    connect(stationCartWallRequest, &RestRequest::requestFinished,
-            stationProcessor);
+    auto errorHandler = std::bind(&CartModel::requestError, this, _1, _2);
 
-    connect(showCartWallRequest, &RestRequest::requestFinished,
-            showProcessor);
+    RestRequest::doGetRequest("api/qdio/stationcartwalls/1/", true, this,
+                              stationProcessor, errorHandler);
 
-    stationCartWallRequest->get();
-    showCartWallRequest->get();
+    RestRequest::doGetRequest("api/qdio/showcartwalls/" + showIdString + "/",
+                              true, this, showProcessor, errorHandler);
 }
 
 CartButton *CartModel::getButton(const enum CartWallType &cartWall,
@@ -151,16 +142,11 @@ void CartModel::processCartWall(const QJsonDocument &data, cartMap &destMap,
 
     QString cartWallId = QString::number(cartWalls.front());
 
-    RestRequest *cartListRequest =
-            new RestRequest("api/qdio/cartlist/" + cartWallId + "/",
-                            true, this);
-
     auto cartProcessCallback = std::bind(&CartModel::processCarts, this,
-                                         std::placeholders::_1,
-                                         std::ref(destMap), callback);
+                                         _1, std::ref(destMap), callback);
 
-    connect(cartListRequest, &RestRequest::requestFinished,
-            cartProcessCallback);
+    auto errorHandler = std::bind(&CartModel::requestError, this, _1, _2);
 
-    cartListRequest->get();
+    RestRequest::doGetRequest("api/qdio/cartlist/" + cartWallId + "/",
+                              true, this, cartProcessCallback, errorHandler);
 }
