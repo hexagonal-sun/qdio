@@ -4,11 +4,14 @@
 #include "cartButton.h"
 
 CartButton::CartButton(QWidget *parent, QString text, QString file,
-                       AudioManager *audioMan)
+                       AudioManager *audioMan, QColor textColour,
+                       QColor bgColour)
     : QAbstractButton(parent),
       cartState_(LOADING),
       position_(0),
       duration_(0),
+      textColour_(textColour),
+      bgColour_(bgColour),
       mediaPlayer_(nullptr),
       audioMan_(audioMan),
       redFlash_(false)
@@ -159,8 +162,8 @@ bool CartButton::isReady(void) const
 void CartButton::paintEvent(QPaintEvent *pe)
 {
     QPainter painter(this);
-    auto bgColour = isReady() ? Qt::darkBlue : Qt::black;
-    auto txtColour = isReady() ? Qt::white : Qt::gray;
+    auto bgColour = isReady() ? bgColour_ : Qt::black;
+    auto txtColour = isReady() ? textColour_ : Qt::gray;
 
     if (redFlash_)
         bgColour = Qt::red;

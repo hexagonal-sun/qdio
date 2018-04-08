@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QAbstractButton>
+#include <QColor>
 #include <QMediaPlayer>
 #include <QPaintEvent>
 #include <QString>
@@ -14,7 +15,8 @@ class CartButton : public QAbstractButton
     Q_OBJECT
 
 public:
-    CartButton(QWidget *parent, QString text, QString file, AudioManager *audioMan);
+    CartButton(QWidget *parent, QString text, QString file, AudioManager *audioMan,
+               QColor textColour = Qt::white, QColor bgColour = Qt::darkBlue);
     CartButton(QWidget *parent);
     void setCartTitle(const QString &text);
 
@@ -35,6 +37,8 @@ private:
     QSize sizeHint() const;
     QSize minimumSizeHint() const;
     bool isReady(void) const;
+    QColor textColour_;
+    QColor bgColour_;
     qint64 duration_;
     qint64 position_;
     AudioManager *audioMan_;
