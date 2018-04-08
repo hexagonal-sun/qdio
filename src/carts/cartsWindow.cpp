@@ -26,6 +26,9 @@ CartsWindow::CartsWindow(QWidget *parent) :
     connect(logoutButton, &QPushButton::released,
             [=]{ SessionManager::getInstance().logout(); });
 
+    connect(stopAllButton, &QPushButton::released,
+            [=]{ audioMan->stopAll(); });
+
     controlButtonLayout->addStretch();
     controlButtonLayout->addWidget(logoutButton);
     controlButtonLayout->addSpacing(35);
