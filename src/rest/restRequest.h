@@ -11,7 +11,8 @@ class RestRequest : public QObject
     Q_OBJECT
 public:
     explicit RestRequest(const QString requestUrl,
-                         bool requiresAuth = true);
+                         bool requiresAuth = true,
+                         QObject *parent = nullptr);
     void get(void);
     void post(QJsonDocument payload);
 

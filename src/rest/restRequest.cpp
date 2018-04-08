@@ -6,9 +6,11 @@
 #include "sessionManager.h"
 
 RestRequest::RestRequest(const QString requestUrl,
-                         bool requiresAuth)
+                         bool requiresAuth,
+                         QObject *parent)
     : requestUrl_(requestUrl),
       requiresAuth_(requiresAuth),
+      QObject(parent),
       netManager_(this)
 {
     connect(&netManager_, &QNetworkAccessManager::finished,
