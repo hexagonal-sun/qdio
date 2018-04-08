@@ -71,3 +71,8 @@ const QString &SessionManager::getApiURL(void) const
 {
     return apiUrl_;
 }
+
+const unsigned int SessionManager::getShowId(void) const
+{
+    return showId_;
+}

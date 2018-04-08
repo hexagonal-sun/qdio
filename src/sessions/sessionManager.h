@@ -20,6 +20,7 @@ public:
     void reloadSettings(void);
     const QString& getAuthToken(void) const;
     const QString& getApiURL(void) const;
+    const unsigned int getShowId(void) const;
 
 private:
     SessionManager() = default;
