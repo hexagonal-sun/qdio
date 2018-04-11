@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8.11)
 
 project(qdio)
 
+set(CMAKE_CXX_STANDARD 14)
+
 set(SUBPROJECTS sessions rest carts)
 
 # Find includes in corresponding build directories
