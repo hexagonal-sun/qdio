@@ -1,8 +1,2 @@
-CMakeFiles/
-CMakeCache.txt
-Makefile
 qdio
-*_autogen/
-cmake_install.cmake
 *.a
-*~
