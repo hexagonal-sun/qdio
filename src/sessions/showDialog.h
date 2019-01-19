@@ -20,15 +20,11 @@ public:
     ~ShowDialog();
 
 private slots:
-    void showRequestFinished(const QJsonDocument &reply);
-    void showRequestError(const QString &errorString, QNetworkReply::NetworkError error);
     void showSelectionComplete();
     void showSelectionCancelled();
 
-
 private:
     Ui::ShowDialog *ui;
-    RestRequest showRequest;
     std::map<QListWidgetItem *, int> showIdMap;
 };
 

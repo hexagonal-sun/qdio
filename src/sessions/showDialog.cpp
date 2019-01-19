@@ -1,6 +1,8 @@
 #include <QMessageBox>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QSqlQuery>
+#include <QSqlError>
 
 #include "showDialog.h"
 #include "sessionManager.h"
@@ -8,7 +10,6 @@
 
 ShowDialog::ShowDialog(QWidget *parent) :
     QDialog(parent),
-    showRequest("api/qdio/shows/"),
     ui(new Ui::ShowDialog)
 {
     ui->setupUi(this);
@@ -19,35 +20,31 @@ ShowDialog::ShowDialog(QWidget *parent) :
     connect(ui->buttonBox, &QDialogButtonBox::rejected,
             this, &ShowDialog::showSelectionCancelled);
 
-    connect(&showRequest, &RestRequest::requestFinished,
-            this, &ShowDialog::showRequestFinished);
+    QSqlQuery showQuery;
+    showQuery.prepare("SELECT * from get_shows_for_user(:uid)");
+    showQuery.bindValue(":uid", SessionManager::getInstance().getUserId());
 
-    connect(&showRequest, &RestRequest::requestError,
-            this, &ShowDialog::showRequestError);
+    if (!showQuery.exec())
+    {
+        QMessageBox mbox;
 
-    showRequest.get();
-}
+        mbox.critical(this, "Error retrieving shows",
+                      "Could not obtain shows for this user\n\nDetails: " +
+                      showQuery.lastError().text());
 
-void ShowDialog::showRequestFinished(const QJsonDocument &reply)
-{
-    for (const auto show : reply.array()) {
-        QJsonObject showObj = show.toObject();
-        QString showName = showObj["title"].toString();
-        int showId = showObj["id"].toInt();
+        return;
+    }
+
+    while (showQuery.next())
+    {
+        auto showId = showQuery.value("showid").toInt();
+        auto showName = showQuery.value("showname").toString();
+
         QListWidgetItem *newItem = new QListWidgetItem(showName);
         showIdMap[newItem] = showId;
 
         ui->showList->addItem(newItem);
     }
-}
-
-void ShowDialog::showRequestError(const QString &errorString,
-                                  QNetworkReply::NetworkError error)
-{
-    QMessageBox::warning(this, "Error",
-                         "Error: could not obtain show list: " + errorString);
-
-    SessionManager::getInstance().showSelectionCancelled();
 }
 
 void ShowDialog::showSelectionComplete()
