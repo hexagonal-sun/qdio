@@ -1,27 +1,29 @@
-CREATE TABLE cart_wall_entity (
-       wall_id   serial PRIMARY KEY,
-       name      text
-);
-
 CREATE TABLE user_account (
        id            SERIAL PRIMARY KEY,
+       name          text NOT NULL,
        email         varchar(100) NOT NULL,
        password_salt varchar(8) NOT NULL,
        password_hash varchar(128) NOT NULL
-) INHERITS (cart_wall_entity);
+);
 
 CREATE TABLE station (
-       id serial PRIMARY KEY
-) INHERITS (cart_wall_entity);
+       id serial PRIMARY KEY,
+       name text NOT NULL
+);
 
 CREATE TABLE show (
-       id SERIAL PRIMARY KEY,
+       id    serial PRIMARY KEY,
+       name  text NOT NULL,
        owner integer NOT NULL REFERENCES station (id) ON DELETE CASCADE
-) INHERITS (cart_wall_entity);
+);
 
 CREATE TABLE cart_wall (
-       id   serial PRIMARY KEY,
-       owner integer NOT NULL REFERENCES cart_wall_entity (wall_id) ON DELETE CASCADE
+       id            serial PRIMARY KEY,
+       name          text,
+       station_owner integer REFERENCES station (id) ON DELETE CASCADE,
+       show_owner    integer REFERENCES show (id) ON DELETE CASCADE,
+       user_owner    integer REFERENCES user_account (id) ON DELETE CASCADE,
+       CONSTRAINT single_owner CHECK (num_nonnulls(station_owner, show_owner, user_owner) = 1)
 );
 
 CREATE TABLE user_show (
@@ -54,14 +56,14 @@ CREATE TABLE cart_theme (
 );
       
 CREATE TABLE cart (
-       title	varchar(20) NOT NULL,
+       title	text NOT NULL,
        wall     integer NOT NULL REFERENCES cart_wall (id) ON DELETE CASCADE,
-       page     integer,
-       x        integer,
-       y        integer,
+       page     integer NOT NULL,
+       x        integer NOT NULL,
+       y        integer NOT NULL,
        theme    integer NOT NULL REFERENCES cart_theme(id),
        PRIMARY KEY(wall, page, x, y),
        CONSTRAINT page_valid_range CHECK (page >= 0 AND page <=7),
-       CONSTRAINT x_valid_range CHECK (x >= 0 AND x <= 3),
+       CONSTRAINT x_valid_range CHECK (x >= 0 AND x <= 4),
        CONSTRAINT y_valid_range CHECK (y >= 0 AND y <= 3)
 );
