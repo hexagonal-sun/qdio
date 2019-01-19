@@ -4,7 +4,7 @@ project(qdio)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(SUBPROJECTS sessions rest carts)
+set(SUBPROJECTS sessions carts)
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)

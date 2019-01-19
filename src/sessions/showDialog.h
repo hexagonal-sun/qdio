@@ -5,8 +5,6 @@
 #include <QListWidgetItem>
 #include <map>
 
-#include "restRequest.h"
-
 namespace Ui {
 class ShowDialog;
 }
