@@ -26,12 +26,6 @@ CartModel::CartModel(QObject *parent)
                                    std::ref(showCarts_), [=]{showCartsReady();});
 
     auto errorHandler = std::bind(&CartModel::requestError, this, _1, _2);
-
-    RestRequest::doGetRequest("api/qdio/stationcartwalls/1/", true, this,
-                              stationProcessor, errorHandler);
-
-    RestRequest::doGetRequest("api/qdio/showcartwalls/" + showIdString + "/",
-                              true, this, showProcessor, errorHandler);
 }
 
 CartButton *CartModel::getButton(const enum CartWallType &cartWall,
@@ -146,7 +140,4 @@ void CartModel::processCartWall(const QJsonDocument &data, cartMap &destMap,
                                          _1, std::ref(destMap), callback);
 
     auto errorHandler = std::bind(&CartModel::requestError, this, _1, _2);
-
-    RestRequest::doGetRequest("api/qdio/cartlist/" + cartWallId + "/",
-                              true, this, cartProcessCallback, errorHandler);
 }
