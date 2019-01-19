@@ -8,4 +8,4 @@ set(SESSIONS_SRCS authDialog.cpp
                   settingsDialog.cpp)
 
 add_library(sessions STATIC ${SESSIONS_SRCS})
-target_link_libraries(sessions Qt5::Network Qt5::Widgets Qt5::Multimedia)
+target_link_libraries(sessions Qt5::Network Qt5::Widgets Qt5::Multimedia Qt5::Sql)

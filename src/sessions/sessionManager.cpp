@@ -1,9 +1,17 @@
 #include <QSettings>
+#include <QSqlDatabase>
 
 #include "authDialog.h"
 #include "sessionManager.h"
 #include "cartsWindow.h"
 #include "showDialog.h"
+
+SessionManager::SessionManager()
+{
+    QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
+    db.setDatabaseName("qdio");
+    db.open();
+}
 
 SessionManager& SessionManager::getInstance(void)
 {
@@ -15,7 +23,7 @@ void SessionManager::begin(void)
 {
     curWidget_ = new AuthDialog();
 
-    authToken_ = "";
+    userId_ = 0;
     showId_ = 0;
     stationId_ = 0;
 
@@ -31,15 +39,20 @@ void SessionManager::reloadSettings(void)
     apiUrl_ = set.value("apiUrl").toString();
 }
 
-void SessionManager::authFinished(QString &authToken)
+void SessionManager::authFinished(int userId)
 {
-    authToken_ = authToken;
+    userId_ = userId;
 
     curWidget_->close();
     curWidget_->deleteLater();
 
     curWidget_ = new ShowDialog;
     curWidget_->show();
+}
+
+const QString& SessionManager::getAuthToken(void) const
+{
+    return "";
 }
 
 void SessionManager::showSelectionComplete(int showId)
@@ -70,9 +83,9 @@ void SessionManager::logout()
     begin();
 }
 
-const QString& SessionManager::getAuthToken(void) const
+const unsigned int SessionManager::getUserId(void) const
 {
-    return authToken_;
+    return userId_;
 }
 
 const QString &SessionManager::getApiURL(void) const
