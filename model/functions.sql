@@ -60,11 +60,11 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION get_shows_for_user(uid INTEGER)
 RETURNS TABLE (
     showid   INTEGER,
-    showname VARCHAR
+    showname TEXT
 )
 AS $$
 BEGIN
-   RETURN QUERY SELECT show.id, show.title
+   RETURN QUERY SELECT show.id, show.name
        FROM show
        INNER JOIN user_show ON user_show.show_id = show.id
        WHERE user_show.user_id = uid;
