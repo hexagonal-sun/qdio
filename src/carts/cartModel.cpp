@@ -1,5 +1,5 @@
-#include <QJsonArray>
-#include <QJsonObject>
+#include <QSqlQuery>
+#include <QSqlError>
 #include <assert.h>
 
 #include "cartModel.h"
@@ -16,16 +16,16 @@ CartModel::CartModel(QObject *parent)
                          { CartWallType::USER, userCarts_ } })
 {
     unsigned int showId = SessionManager::getInstance().getShowId();
-    QString showIdString = QString::number(showId);
 
-    auto stationProcessor = std::bind(&CartModel::processCartWall, this, _1,
-                                      std::ref(stationCarts_),
-                                      [=]{stationCartsReady();});
+    QSqlQuery stationCartsQuery;
+    stationCartsQuery.prepare("select * from get_station_cartwalls_for_show(:showid)");
+    stationCartsQuery.bindValue(":showid", showId);
+    processCartWall(stationCartsQuery, stationCarts_, [=]{stationCartsReady();});
 
-    auto showProcessor = std::bind(&CartModel::processCartWall, this, _1,
-                                   std::ref(showCarts_), [=]{showCartsReady();});
-
-    auto errorHandler = std::bind(&CartModel::requestError, this, _1, _2);
+    QSqlQuery showCartsQuery;
+    showCartsQuery.prepare("select * from get_cartwalls_for_show(:showid)");
+    showCartsQuery.bindValue(":showid", showId);
+    processCartWall(showCartsQuery, showCarts_, [=]{showCartsReady();});
 }
 
 CartButton *CartModel::getButton(const enum CartWallType &cartWall,
@@ -46,14 +46,6 @@ CartButton *CartModel::getButton(const enum CartWallType &cartWall,
     return new CartButton(parent, cart->second.title, "foo", audioMan,
                           cart->second.theme.textColour,
                           cart->second.theme.bgColour);
-}
-
-void CartModel::requestError(const QString &errorString,
-                             QNetworkReply::NetworkError error) const
-{
-    QString modelErrorString = "Error getting carts configuration: " + errorString;
-
-    emit modelError(modelErrorString);
 }
 
 bool CartModel::isReady() const
@@ -90,24 +82,37 @@ QColor CartModel::getColourFromHexString(const QString &value) const
     return ret;
 }
 
-void CartModel::processCarts(const QJsonDocument &data, cartMap &destMap,
+void CartModel::requestError(const QString &errorString) const
+{
+    QString modelErrorString = "Error getting carts configuration: " + errorString;
+
+    emit modelError(modelErrorString);
+}
+
+void CartModel::processCarts(int cartWallId, cartMap &destMap,
                              std::function<void()> callback)
 {
-    for (const auto stationCart : data.array()) {
-        const auto stationCartObject = stationCart.toObject();
-        const auto stationCartTheme = stationCartObject["theme"].toObject();
+    QSqlQuery cartsQuery;
+    cartsQuery.prepare("SELECT * from get_carts_for_cartwall(:cartwallid)");
+    cartsQuery.bindValue(":cartwallid", cartWallId);
 
+    if (!cartsQuery.exec()) {
+        requestError(cartsQuery.lastError().text());
+        return;
+    }
+
+    while (cartsQuery.next()) {
         struct cartLocus locus;
         struct cartProperties newCart;
 
-        locus.x = stationCartObject["x"].toInt();
-        locus.y = stationCartObject["y"].toInt();
-        locus.page = stationCartObject["page"].toInt();
-        newCart.title = stationCartObject["title"].toString();
+        locus.x = cartsQuery.value("x").toInt();
+        locus.y = cartsQuery.value("y").toInt();
+        locus.page = cartsQuery.value("page").toInt();
+        newCart.title = cartsQuery.value("title").toString();
         newCart.theme.bgColour =
-                getColourFromHexString(stationCartTheme["bg_colour"].toString());
+            getColourFromHexString(cartsQuery.value("bg_colour").toString());
         newCart.theme.textColour =
-                getColourFromHexString(stationCartTheme["text_colour"].toString());
+            getColourFromHexString(cartsQuery.value("text_colour").toString());
 
         newCart.locus = locus;
 
@@ -117,15 +122,18 @@ void CartModel::processCarts(const QJsonDocument &data, cartMap &destMap,
     callback();
 }
 
-void CartModel::processCartWall(const QJsonDocument &data, cartMap &destMap,
+void CartModel::processCartWall(QSqlQuery &data, cartMap &destMap,
                                 std::function<void ()> callback)
 {
     std::list<unsigned int> cartWalls;
 
-    for (const auto cartWall : data.array()) {
-        QJsonObject cartWallObject = cartWall.toObject();
-        cartWalls.push_back(cartWallObject["id"].toInt());
+    if (!data.exec()) {
+        requestError(data.lastError().text());
+        return;
     }
+
+    while (data.next())
+        cartWalls.push_back(data.value("id").toInt());
 
     // If there are no cart walls, there's nothing we can do.  Call
     // the ready callback and just return.
@@ -134,10 +142,5 @@ void CartModel::processCartWall(const QJsonDocument &data, cartMap &destMap,
         return;
     }
 
-    QString cartWallId = QString::number(cartWalls.front());
-
-    auto cartProcessCallback = std::bind(&CartModel::processCarts, this,
-                                         _1, std::ref(destMap), callback);
-
-    auto errorHandler = std::bind(&CartModel::requestError, this, _1, _2);
+    processCarts(cartWalls.front(), destMap, callback);
 }

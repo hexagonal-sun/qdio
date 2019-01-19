@@ -11,4 +11,4 @@ set(CARTS_SRCS cartButton.cpp
                cartModel.cpp)
 
 add_library(carts STATIC ${CARTS_SRCS})
-target_link_libraries(carts Qt5::Widgets Qt5::Multimedia)
+target_link_libraries(carts Qt5::Widgets Qt5::Multimedia Qt5::Sql)

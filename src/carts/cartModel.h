@@ -1,6 +1,7 @@
 #ifndef CARTMODEL_H
 #define CARTMODEL_H
 
+#include <QSqlQuery>
 #include <QObject>
 #include <QString>
 #include <QColor>
@@ -9,7 +10,6 @@
 #include <unordered_map>
 
 #include "audioManager.h"
-#include "restRequest.h"
 #include "cartButton.h"
 
 enum class CartWallType {
@@ -73,15 +73,15 @@ signals:
     void modelError(const QString error) const;
 
 private slots:
-    void processCarts(const QJsonDocument &data, cartMap &destMap,
-                         std::function<void ()> callback);
-    void processCartWall(const QJsonDocument &data, cartMap &destMap,
+    void processCarts(int cartWallId, cartMap &destMap,
+                      std::function<void ()> callback);
+
+    void processCartWall(QSqlQuery &data, cartMap &destMap,
                          std::function<void()> callback);
 
-    void requestError(const QString &errorString,
-                      QNetworkReply::NetworkError error) const;
 
 private:
+    void requestError(const QString &errorString) const;
     void stationCartsReady(void);
     void showCartsReady(void);
     void checkReady(void) const;
