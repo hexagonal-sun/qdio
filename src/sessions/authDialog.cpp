@@ -1,6 +1,9 @@
+#include <QCryptographicHash>
+#include <QByteArray>
 #include <QMessageBox>
-#include <QJsonObject>
 #include <QPushButton>
+#include <QSqlQuery>
+#include <QSqlError>
 
 #include "authDialog.h"
 #include "sessionManager.h"
@@ -9,28 +12,77 @@
 
 AuthDialog::AuthDialog(QWidget *parent) :
     QDialog(parent),
-    authRequest("api/auth/login/", false),
     ui(new Ui::AuthDialog)
 {
     ui->setupUi(this);
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &AuthDialog::accepted);
-    connect(&authRequest, &RestRequest::requestFinished, this, &AuthDialog::authRequestFinished);
-    connect(&authRequest, &RestRequest::requestError, this, &AuthDialog::authError);
     connect(ui->btnSettings, &QPushButton::pressed, this, &AuthDialog::showSettingsDialog);
 }
 
 void AuthDialog::accepted(void)
 {
-    QJsonObject record;
+    auto username = ui->editUsername->text();
+    auto password = ui->editPassword->text();
 
-    setControlsEnabled(false);
+    QSqlQuery userQuery;
+    userQuery.prepare("SELECT * "
+                      "FROM  find_user(:username) "
+                      "AS f(user_id integer, salt varchar)");
 
-    record.insert("username", QJsonValue::fromVariant(ui->editUsername->text()));
-    record.insert("password", QJsonValue::fromVariant(ui->editPassword->text()));
+    userQuery.bindValue(":username", username);
 
-    QJsonDocument document(record);
+    if (!userQuery.exec())
+    {
+        showErrorMessage("Invalid username or password");
+        return;
+    }
 
-    authRequest.post(document);
+    userQuery.first();
+
+    int userId = userQuery.value("user_id").toInt();
+    auto salt = QByteArray::fromHex(userQuery.value("salt").toByteArray());
+
+    QCryptographicHash hash(QCryptographicHash::Keccak_256);
+
+    hash.addData(salt);
+    hash.addData(password.toStdString().c_str(), password.size());
+
+    QSqlQuery loginQuery;
+    loginQuery.prepare("SELECT user_login(:uid, :hash)");
+    loginQuery.bindValue(":uid", userId);
+    loginQuery.bindValue(":hash",
+                         QString::fromStdString(hash.result().toHex(0).toStdString()));
+
+
+    if (!loginQuery.exec())
+    {
+        showErrorMessage("Could not perform login query\n\nDetails:" +
+                         loginQuery.lastError().text());
+
+        return;
+    }
+
+    loginQuery.first();
+
+    bool loginSuccessful = loginQuery.value(0).toBool();
+
+    if (!loginSuccessful)
+    {
+        showErrorMessage("Invalid username or password");
+        return;
+    }
+
+    SessionManager::getInstance().authFinished(userId);
+}
+
+void AuthDialog::showErrorMessage(QString errorText)
+{
+    QMessageBox mbox;
+
+    mbox.critical(this, "Authentication Error",
+                  "Error: " + errorText);
+
+    mbox.exec();
 }
 
 void AuthDialog::showSettingsDialog(void)
@@ -40,27 +92,6 @@ void AuthDialog::showSettingsDialog(void)
     settingsDlg.exec();
 
     SessionManager::getInstance().reloadSettings();
-}
-
-void AuthDialog::authRequestFinished(const QJsonDocument &reply)
-{
-    QJsonObject obj = reply.object();
-    QString authToken = obj["token"].toString();
-
-    SessionManager::getInstance().authFinished(authToken);
-}
-
-void AuthDialog::authError(const QString &errorString, QNetworkReply::NetworkError error)
-{
-    QString userErrorString = errorString;
-
-    if (error == QNetworkReply::ProtocolInvalidOperationError)
-        userErrorString = "Invalid username or password.";
-
-    QMessageBox::warning(this, "Authentication Failed",
-                         "Authentication failed: " + userErrorString);
-
-    setControlsEnabled(true);
 }
 
 void AuthDialog::setControlsEnabled(bool state)

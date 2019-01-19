@@ -3,7 +3,6 @@
 
 #include <QDialog>
 
-#include "restRequest.h"
 #include "sessionManager.h"
 
 namespace Ui {
@@ -21,13 +20,10 @@ public:
 private slots:
     void accepted(void);
     void showSettingsDialog(void);
-    void authRequestFinished(const QJsonDocument &reply);
-    void authError(const QString &errorString, QNetworkReply::NetworkError error);
-
 private:
+    void showErrorMessage(QString errorText);
     void setControlsEnabled(bool state);
     Ui::AuthDialog *ui;
-    RestRequest authRequest;
 };
 
 #endif // AUTHDIALOG_H
