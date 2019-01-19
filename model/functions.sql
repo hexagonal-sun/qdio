@@ -64,8 +64,6 @@ RETURNS TABLE (
 )
 AS $$
 BEGIN
-   PERFORM check_for_user(uid);
-
    RETURN QUERY SELECT show.id, show.title
        FROM show
        INNER JOIN user_show ON user_show.show_id = show.id
