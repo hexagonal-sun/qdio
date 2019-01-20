@@ -18,6 +18,7 @@ public:
 
 private slots:
     void accepted();
+    void audioFileBrowseClick();
 
 private:
     Ui::SettingsDialog *ui;
