@@ -28,8 +28,10 @@ insert into cart_theme(name, bg_colour, text_colour) values
           ('News', 2, 1),
           ('Bed', 6, 2);
 
-insert into cart values ('Matt 1', 4, 0, 0, 0, 1),
-                        ('Matt 2', 4, 0, 1, 0, 2),
-                        ('Matt 3', 4, 0, 2, 0, 3),
-                        ('Matt 4', 4, 0, 3, 0, 4),
-                        ('Matt 5', 4, 0, 4, 0, 5);
+insert into audio_file(name,location,show_owner) values
+                      ('Virgin bed', 'virgin.mp3', 1),
+                      ('Saw bed', 'saw.m4a', 1);
+
+insert into cart values ('Virgin Bed', 4, 0, 0, 0, 1, 1),
+                        ('Saw Bed', 4, 0, 1, 0, 2, 2);
+

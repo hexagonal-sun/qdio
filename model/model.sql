@@ -26,6 +26,16 @@ CREATE TABLE cart_wall (
        CONSTRAINT single_owner CHECK (num_nonnulls(station_owner, show_owner, user_owner) = 1)
 );
 
+CREATE TABLE audio_file (
+       id            serial PRIMARY KEY,
+       name          text,
+       location      text NOT NULL,
+       station_owner integer REFERENCES station (id) ON DELETE CASCADE,
+       show_owner    integer REFERENCES show (id) ON DELETE CASCADE,
+       user_owner    integer REFERENCES user_account (id) ON DELETE CASCADE,
+       CONSTRAINT single_owner CHECK (num_nonnulls(station_owner, show_owner, user_owner) = 1)
+);
+
 CREATE TABLE user_show (
        show_id  integer NOT NULL REFERENCES show(id) ON DELETE CASCADE,
        user_id  integer NOT NULL REFERENCES user_account(id) ON DELETE CASCADE,
@@ -62,6 +72,7 @@ CREATE TABLE cart (
        x        integer NOT NULL,
        y        integer NOT NULL,
        theme    integer NOT NULL REFERENCES cart_theme(id),
+       file     integer NOT NULL REFERENCES audio_file(id),
        PRIMARY KEY(wall, page, x, y),
        CONSTRAINT page_valid_range CHECK (page >= 0 AND page <=7),
        CONSTRAINT x_valid_range CHECK (x >= 0 AND x <= 4),
