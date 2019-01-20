@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QWidget>
+#include <QDir>
 
 class SessionManager : public QObject
 {
@@ -19,16 +20,18 @@ public:
     void showSelectionCancelled();
     void reloadSettings(void);
     void logout(void);
-    const unsigned int getUserId(void) const;
+    unsigned int getUserId(void) const;
     const QString& getAuthToken(void) const;
     const QString& getApiURL(void) const;
-    const unsigned int getShowId(void) const;
+    unsigned int getShowId(void) const;
+    QDir getAudioRootDir(void) const;
 
 private:
     SessionManager();
     QWidget *curWidget_;
     QString authToken_;
     QString apiUrl_;
+    QDir audioRoot_;
     unsigned int userId_;
     unsigned int showId_;
     unsigned int stationId_;

@@ -21,11 +21,13 @@ SessionManager& SessionManager::getInstance(void)
 
 void SessionManager::begin(void)
 {
+    QSettings settings;
     curWidget_ = new AuthDialog();
 
     userId_ = 0;
     showId_ = 0;
     stationId_ = 0;
+    audioRoot_ = QDir(settings.value("audioFileRoot").toString());
 
     reloadSettings();
 
@@ -83,7 +85,7 @@ void SessionManager::logout()
     begin();
 }
 
-const unsigned int SessionManager::getUserId(void) const
+unsigned int SessionManager::getUserId(void) const
 {
     return userId_;
 }
@@ -93,7 +95,12 @@ const QString &SessionManager::getApiURL(void) const
     return apiUrl_;
 }
 
-const unsigned int SessionManager::getShowId(void) const
+unsigned int SessionManager::getShowId(void) const
 {
     return showId_;
+}
+
+QDir SessionManager::getAudioRootDir(void) const
+{
+    return audioRoot_;
 }
