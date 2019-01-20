@@ -165,8 +165,10 @@ void CartButton::paintEvent(QPaintEvent *pe)
     auto bgColour = isReady() ? bgColour_ : Qt::black;
     auto txtColour = isReady() ? textColour_ : Qt::gray;
 
-    if (redFlash_)
+    if (redFlash_) {
         bgColour = Qt::red;
+        txtColour = Qt::white;
+    }
 
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(QPen(Qt::green, 3));
