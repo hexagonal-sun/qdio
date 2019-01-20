@@ -3,7 +3,7 @@
 
 #include "cartButton.h"
 
-CartButton::CartButton(QWidget *parent, QString text, QString file,
+CartButton::CartButton(QWidget *parent, QString text, QFileInfo file,
                        AudioManager *audioMan, QColor textColour,
                        QColor bgColour)
     : QAbstractButton(parent),
@@ -11,6 +11,7 @@ CartButton::CartButton(QWidget *parent, QString text, QString file,
       position_(0),
       duration_(0),
       textColour_(textColour),
+      cartFile_(file),
       bgColour_(bgColour),
       mediaPlayer_(nullptr),
       audioMan_(audioMan),
@@ -25,7 +26,12 @@ CartButton::CartButton(QWidget *parent, QString text, QString file,
     connect(&flashTimer_, &QTimer::timeout,
             this, &CartButton::flashTimeout);
 
-    audioMan->obtainDuration("/home/matthew/test.mp3",
+    if (!cartFile_.isFile()) {
+        cartState_ = ERROR;
+        return;
+    }
+
+    audioMan->obtainDuration(cartFile_.absoluteFilePath(),
                              [=](qint64 newDuration)
         {
             duration_ = newDuration;
@@ -55,7 +61,7 @@ void CartButton::clicked()
     if (!mediaPlayer_)
         return;
 
-    mediaPlayer_->setMedia(QUrl::fromLocalFile("/home/matthew/test.mp3"));
+    mediaPlayer_->setMedia(QUrl::fromLocalFile(cartFile_.absoluteFilePath()));
 
     // When we recieve a position update, update() the widget so that
     // the new duration is painted.
