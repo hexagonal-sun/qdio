@@ -105,12 +105,13 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION get_carts_for_cartwall(cartwallid INTEGER)
 RETURNS TABLE (
-    title       text,
-    page        integer,
-    x           integer,
-    y           integer,
-    bg_colour   varchar,
-    text_colour varchar
+    title         text,
+    page          integer,
+    x             integer,
+    y             integer,
+    bg_colour     varchar,
+    text_colour   varchar,
+    file_location text
 )
 AS $$
 BEGIN
@@ -118,12 +119,14 @@ BEGIN
                         cart.page,
                         cart.x,
                         cart.y,
-                        bgcol.hex AS bg_colour,
-                        textcol.hex AS text_colour
+                        bgcol.hex,
+                        textcol.hex,
+                        audio_file.location
         FROM cart
         INNER JOIN cart_theme ON cart.theme = cart_theme.id
         INNER JOIN colour AS bgcol ON cart_theme.bg_colour = bgcol.id
         INNER JOIN colour AS textcol ON cart_theme.text_colour = textcol.id
+        INNER JOIN audio_file ON cart.file = audio_file.id
         WHERE cart.wall = cartwallid;
 END;
 $$ LANGUAGE plpgsql;
