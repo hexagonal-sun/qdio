@@ -1,6 +1,7 @@
 #ifndef CARTMODEL_H
 #define CARTMODEL_H
 
+#include <QFileInfo>
 #include <QSqlQuery>
 #include <QObject>
 #include <QString>
@@ -39,6 +40,7 @@ struct cartProperties {
     struct cartTheme theme;
     struct cartLocus locus;
     QString title;
+    QFileInfo audioFile;
 };
 
 namespace std

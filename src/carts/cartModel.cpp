@@ -93,6 +93,7 @@ void CartModel::processCarts(int cartWallId, cartMap &destMap,
                              std::function<void()> callback)
 {
     QSqlQuery cartsQuery;
+    QDir audioRoot = SessionManager::getInstance().getAudioRootDir();
     cartsQuery.prepare("SELECT * from get_carts_for_cartwall(:cartwallid)");
     cartsQuery.bindValue(":cartwallid", cartWallId);
 
@@ -115,6 +116,7 @@ void CartModel::processCarts(int cartWallId, cartMap &destMap,
             getColourFromHexString(cartsQuery.value("text_colour").toString());
 
         newCart.locus = locus;
+        newCart.audioFile = QFileInfo(audioRoot, cartsQuery.value("file_location").toString());
 
         destMap.insert({locus, newCart});
     }
