@@ -47,13 +47,10 @@ void AudioManager::stopAll()
 
 void AudioManager::serviceDurationRequest(QMediaPlayer *mp, durationRequest req)
 {
-    connect(mp, &QMediaPlayer::mediaStatusChanged,
-            [=](QMediaPlayer::MediaStatus status)
-    {
-        if (status != QMediaPlayer::LoadedMedia)
-            return;
-
-        req.second(mp->duration());
+    connect(mp, &QMediaPlayer::durationChanged,
+            [=](qint64 duration)
+   {
+        req.second(duration);
         releaseMediaPlayer(mp);
     });
 
