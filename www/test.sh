@@ -1,0 +1,1 @@
+DEBUG=www:* npm start
