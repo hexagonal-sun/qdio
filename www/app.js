@@ -30,6 +30,9 @@ app.use('/jquery', express.static(path.join(__dirname, 'node_modules',
 app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules',
                                                'bootstrap', 'dist')));
 
+app.use('/sha3', express.static(path.join(__dirname, 'node_modules',
+                                          'js-sha3', 'src')));
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
