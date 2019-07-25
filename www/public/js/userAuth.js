@@ -70,7 +70,7 @@ async function userLogin()
             return;
         }
 
-        window.location.replace('/dashboard/');
+        window.location.replace('/dashboard/home/');
 
     } catch (e) {
         $('#alertDanger').text('Failed to login: server error')

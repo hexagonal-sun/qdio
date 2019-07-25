@@ -5,7 +5,7 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
     if (req.session.uid)
     {
-        return res.redirect('/dashboard/')
+        return res.redirect('/dashboard/home/')
     }
 
     res.render('index');

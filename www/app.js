@@ -8,6 +8,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var userAuthRouter = require('./routes/userAuth');
+var dashboardRouter = require('./routes/dashboard');
 
 var app = express();
 
@@ -34,9 +35,13 @@ app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules',
 app.use('/sha3', express.static(path.join(__dirname, 'node_modules',
                                           'js-sha3', 'src')));
 
+app.use('/feather', express.static(path.join(__dirname, 'node_modules',
+                                             'feather-icons', 'dist')));
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/userAuth', userAuthRouter);
+app.use('/dashboard', dashboardRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
