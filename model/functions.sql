@@ -8,6 +8,7 @@ RETURNS RECORD
 AS $$
 DECLARE
     ret RECORD;
+    max_user_id INT;
 BEGIN
    SELECT id, password_salt
        FROM user_account
@@ -15,7 +16,11 @@ BEGIN
        INTO ret;
 
    IF NOT FOUND THEN
-       RAISE 'User % not found', uname;
+     SELECT max(id) FROM user_account INTO max_user_id;
+
+     SELECT trunc(random() * max_user_id)::int AS id,
+            substring(md5(random()::text), 0, 9)::varchar AS password_salt
+            INTO ret;
    END IF;
 
    RETURN ret;
