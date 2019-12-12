@@ -108,6 +108,23 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- For a given user, get all avilable cart walls.
+CREATE OR REPLACE FUNCTION get_cartwalls_for_user(uid INTEGER)
+  RETURNS TABLE (
+    id INTEGER,
+    name TEXT
+)
+AS $$
+DECLARE
+  show_id INTEGER;
+BEGIN
+  RETURN QUERY SELECT DISTINCT cartwalls.id, cartwalls.name
+    FROM get_shows_for_user(uid), get_station_cartwalls_for_show(showid) AS cartwalls;
+  RETURN QUERY SELECT DISTINCT cartwalls.id, cartwalls.name
+    FROM get_shows_for_user(uid), get_cartwalls_for_show(showid) AS cartwalls;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION get_carts_for_cartwall(cartwallid INTEGER)
 RETURNS TABLE (
     title         text,
