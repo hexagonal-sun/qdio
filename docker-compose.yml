@@ -1,0 +1,37 @@
+version: '3.7'
+
+services:
+  client:
+    container_name: qdio-client
+    build:
+      context: www/client/
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    volumes:
+      - "./www/client/:/app/"
+    environment:
+      - NODE_ENV=development
+
+  server:
+    container_name: qdio-server
+    build:
+      context: www/server/
+      dockerfile: Dockerfile
+    ports:
+      - '3000'
+    environment:
+      - PGHOST=db
+      - PGUSER=qdio
+      - PGPASSWORD=qdio
+      - PGDATABASE=qdio
+
+  db:
+    container_name: qdio-db
+    build:
+      context: model/
+      dockerfile: Dockerfile
+    environment:
+      - POSTGRES_USER=qdio
+      - POSTGRES_PASSWORD=qdio
+
