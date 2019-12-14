@@ -37,13 +37,15 @@ let CartRow = props => {
     if (props.cartWallState)
         cartRowState = props.cartWallState.filter(obj => obj.y == props.y);
 
+    let carts = Array.from(Array(5)).map((x, i) => <Cart x={i}
+                                                         key={i}
+                                                         y={props.y}
+                                                         isLoading={props.isLoading}
+                                                         cartRowState={cartRowState}/>);
+
     return (
         <Row>
-          <Cart x={0} y={props.y} isLoading={props.isLoading} cartRowState={cartRowState} />
-          <Cart x={1} y={props.y} isLoading={props.isLoading} cartRowState={cartRowState} />
-          <Cart x={2} y={props.y} isLoading={props.isLoading} cartRowState={cartRowState} />
-          <Cart x={3} y={props.y} isLoading={props.isLoading} cartRowState={cartRowState} />
-          <Cart x={4} y={props.y} isLoading={props.isLoading} cartRowState={cartRowState} />
+          {carts}
         </Row>
     );
 };
@@ -65,16 +67,13 @@ class CartWallEditor extends React.Component
     };
 
     render = () => {
+        let cartRows = Array.from(Array(4)).map((x, i) => <CartRow y={i}
+                                                                   key={i}
+                                                                   isLoading={this.state.isLoading}
+                                                                   cartWallState={this.state.cartWallState} />);
         return (
             <>
-              <CartRow y={0} isLoading={this.state.isLoading}
-                       cartWallState={this.state.cartWallState} />
-              <CartRow y={1} isLoading={this.state.isLoading}
-                       cartWallState={this.state.cartWallState} />
-              <CartRow y={2} isLoading={this.state.isLoading}
-                       cartWallState={this.state.cartWallState} />
-              <CartRow y={3} isLoading={this.state.isLoading}
-                       cartWallState={this.state.cartWallState} />
+              {cartRows}
             </>
         );
     }
