@@ -15,7 +15,7 @@ let Cart = props => {
         cartText = "Loading";
 
     if (props.cartRowState)
-        cartState = props.cartRowState.find(obj => obj.x == props.x);
+        cartState = props.cartRowState.find(obj => obj.x === props.x);
 
     if (cartState) {
         cartText = cartState.title;
@@ -35,7 +35,7 @@ let CartRow = props => {
     let cartRowState = null;
 
     if (props.cartWallState)
-        cartRowState = props.cartWallState.filter(obj => obj.y == props.y);
+        cartRowState = props.cartWallState.filter(obj => obj.y === props.y);
 
     let carts = Array.from(Array(5)).map((x, i) => <Cart x={i}
                                                          key={i}
