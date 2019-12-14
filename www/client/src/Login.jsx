@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import keccak from 'keccak';
 import './Login.css';
-import { Form, Button, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { BrowserRouter as Router, Redirect } from 'react-router-dom';
 
 class Login extends React.Component {
@@ -79,41 +79,47 @@ class Login extends React.Component {
     render = () => {
         return (
             <>
-              {this.state.alert &&
-               <Alert variant="danger">
-                 {this.state.alert}
-               </Alert>
-              }
+              <Container style={{marginTop: "auto", marginBottom: "auto"}}>
+                <Row>
+                  <Col>
+                    {this.state.alert &&
+                     <Alert variant="danger">
+                       {this.state.alert}
+                     </Alert>
+                    }
 
-              <Form id="signin-form">
-                <Form.Group controlId="signinFormEmail">
-                  <Form.Label srOnly={true}>Email address</Form.Label>
-                  <Form.Control disabled={this.state.signInRequested}
-                                name="userName"
-                                onChange={this.handleChange}
-                                type="input"
-                                placeholder="User Name" />
-                </Form.Group>
+                    <Form id="signin-form">
+                      <Form.Group controlId="signinFormEmail">
+                        <Form.Label srOnly={true}>Email address</Form.Label>
+                        <Form.Control disabled={this.state.signInRequested}
+                                      name="userName"
+                                      onChange={this.handleChange}
+                                      type="input"
+                                      placeholder="User Name" />
+                      </Form.Group>
 
-                <Form.Group controlId="signinFormPassword">
-                  <Form.Label srOnly={true}>Password</Form.Label>
-                  <Form.Control disabled={this.state.signInRequested}
-                                name="password"
-                                onChange={this.handleChange}
-                                type="password"
-                                placeholder="Password" />
-                </Form.Group>
-                <Button variant="primary"
-                        disabled={this.state.signInRequested}
-                        type="submit"
-                        onClick={this.state.signInRequested ? null : this.handleSignInClick}
-                        block>
-                  {this.state.signInRequested ? 'Signing In...' : 'Sign In'}
-                </Button>
-              </Form>
-              <Router>
-                {this.state.isAuthenticated && <Redirect to='/dashboard/' />}
-              </Router>
+                      <Form.Group controlId="signinFormPassword">
+                        <Form.Label srOnly={true}>Password</Form.Label>
+                        <Form.Control disabled={this.state.signInRequested}
+                                      name="password"
+                                      onChange={this.handleChange}
+                                      type="password"
+                                      placeholder="Password" />
+                      </Form.Group>
+                      <Button variant="primary"
+                              disabled={this.state.signInRequested}
+                              type="submit"
+                              onClick={this.state.signInRequested ? null : this.handleSignInClick}
+                              block>
+                        {this.state.signInRequested ? 'Signing In...' : 'Sign In'}
+                      </Button>
+                    </Form>
+                    <Router>
+                      {this.state.isAuthenticated && <Redirect to='/dashboard/' />}
+                    </Router>
+                  </Col>
+                </Row>
+              </Container>
             </>
         );
     }
