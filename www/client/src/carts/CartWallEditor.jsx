@@ -19,9 +19,11 @@ let Cart = props => {
 
     if (cartState) {
         cartText = cartState.title;
-        cartStyle.color = cartState.text_colour;
-        cartStyle.borderColor = "black";
-        cartStyle.backgroundColor = cartState.bg_colour;
+        cartStyle = {
+            color: cartState.text_colour,
+            borderColor: "black",
+            backgroundColor: cartState.bg_colour,
+        };
     }
 
     return (
