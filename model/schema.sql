@@ -64,7 +64,7 @@ CREATE TABLE cart_theme (
        bg_colour   integer NOT NULL REFERENCES colour(id),
        text_colour integer NOT NULL REFERENCES colour(id)
 );
-      
+
 CREATE TABLE cart (
        title	text NOT NULL,
        wall     integer NOT NULL REFERENCES cart_wall (id) ON DELETE CASCADE,
