@@ -15,10 +15,16 @@ class App extends React.Component
         });
     }
 
+    handleDeAuth = () => {
+        this.setState({
+            authToken: null,
+        });
+    }
+
     render = () => {
         return (
             <>
-              {this.state.authToken ? <Dashboard onDeAtuh={() => this.handleDeAuth()}/> :
+              {this.state.authToken ? <Dashboard onDeAuth={() => this.handleDeAuth()}/> :
                                       <Login onAuth={token => this.handleAuth(token)}/>}
             </>
         );

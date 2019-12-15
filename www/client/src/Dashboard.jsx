@@ -42,7 +42,7 @@ class Dashboard extends React.Component
               <Navbar variant="dark" bg="dark" className="justify-content-between" sticky="top">
                 <Navbar.Brand >Qdio Dashboard</Navbar.Brand>
                 <Nav className="justify-content-end">
-                  <Nav.Link onSelect={this.props.onDeAuth}>Sign Out</Nav.Link>
+                  <Nav.Link onClick={this.props.onDeAuth}>Sign Out</Nav.Link>
                 </Nav>
               </Navbar>
 
