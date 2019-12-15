@@ -57,9 +57,6 @@ class Login extends React.Component {
             }
 
             this.props.onAuth('0xdeadbeef');
-            this.setState({
-                signInRequested: false,
-            })
 
         } catch (e) {
             console.log(e);
