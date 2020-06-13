@@ -18,18 +18,14 @@
     "ext": "ts"
   },
   "dependencies": {
-    "pug": "2.0.0-beta11",
-    "pg": "^7.9.0",
-    "morgan": "~1.9.0",
-    "js-sha3": "^0.8.0",
-    "jquery": "^3.5.0",
-    "http-errors": "~1.6.2",
-    "feather-icons": "^4.19.0",
-    "express-session": "^1.15.6",
-    "express": "~4.16.0",
-    "debug": "~2.6.9",
     "cookie-parser": "~1.4.3",
-    "bootstrap": "^4.3.1"
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "express-session": "^1.15.6",
+    "http-errors": "~1.6.2",
+    "js-sha3": "^0.8.0",
+    "morgan": "~1.9.0",
+    "pg": "^7.9.0"
   },
   "scripts": {
     "dev": "nodemon",
