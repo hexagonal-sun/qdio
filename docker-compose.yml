@@ -21,6 +21,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - '3000'
+    volumes:
+      - "./www/server/src/:/app/src"
     environment:
       - PGHOST=db
       - PGUSER=qdio

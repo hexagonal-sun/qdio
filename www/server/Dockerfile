@@ -17,4 +17,4 @@ COPY bin/ bin/
 COPY src/ src/
 
 # start app
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]
