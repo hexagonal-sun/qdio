@@ -11,11 +11,8 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json .
 RUN npm install
 
-COPY app.ts .
 COPY bin/ bin/
-COPY public/ public/
-COPY routes/ routes/
-COPY views/ views/
+COPY src/ src/
 
 # start app
 CMD ["npm", "start"]
