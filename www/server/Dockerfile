@@ -9,6 +9,8 @@ ENV PATH /app/node_modules/.bin:$PATH
 
 # install and cache app dependencies
 COPY package.json .
+COPY package-lock.json .
+COPY tsconfig.json .
 RUN npm install
 
 COPY bin/ bin/
