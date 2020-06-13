@@ -1,19 +1,16 @@
-var createError = require('http-errors');
 import express from 'express';
-var expressSession = require('express-session');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+import expressSession from 'express-session';
+import path from 'path';
+import logger from 'morgan';
 
-var userAuthRouter = require('./routes/userAuth');
+let userAuthRouter = require('./routes/userAuth');
 let cartRouter = require('./routes/carts');
 
-var app = express();
+let app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(expressSession({
     secret: 'foobarbaz',
     resave: false,
