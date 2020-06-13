@@ -24,4 +24,4 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/userAuth', userAuthRouter);
 app.use('/carts', cartRouter);
 
-module.exports = app;
+export default app;
