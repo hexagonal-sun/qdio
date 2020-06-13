@@ -1,9 +1,9 @@
-var express = require('express');
-var pg = require('pg');
-var router = express.Router();
+import { Router, Request, Response } from 'express';
+import { Client } from 'pg';
 
-router.post('/findUser', async (req, res, next) => {
-    const { Client } = require('pg');
+const router = Router();
+
+router.post('/findUser', async (req : Request, res : Response) => {
     const client = new Client({
         database: 'qdio'
     });
@@ -23,8 +23,7 @@ router.post('/findUser', async (req, res, next) => {
     }
 });
 
-router.post('/userLogin', async (req, res, next) => {
-    const { Client } = require('pg');
+router.post('/userLogin', async (req : Request, res : Response) => {
     const client = new Client({
         database: 'qdio'
     });
@@ -39,6 +38,9 @@ router.post('/userLogin', async (req, res, next) => {
 
         let loginSuccessful = qRes.rows[0].user_login;
 
+        if (!req.session)
+            throw Error('Session not found in request');
+
         if (loginSuccessful)
             req.session.uid = req.body.uid;
 
@@ -52,4 +54,4 @@ router.post('/userLogin', async (req, res, next) => {
     }
 });
 
-module.exports = router;
+export default router;

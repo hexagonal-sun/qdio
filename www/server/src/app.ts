@@ -3,8 +3,8 @@ import expressSession from 'express-session';
 import path from 'path';
 import logger from 'morgan';
 
-let userAuthRouter = require('./routes/userAuth');
-let cartRouter = require('./routes/carts');
+import userAuthRouter from './routes/userAuth';
+import cartRouter from './routes/carts';
 
 let app = express();
 

@@ -1,9 +1,9 @@
-var express = require('express');
-var pg = require('pg');
-var router = express.Router();
+import { Router, Request, Response } from 'express';
+import { Client } from 'pg';
 
-router.get('/getCartWalls', async (req, res, next) => {
-    const { Client } = require('pg');
+const router = Router();
+
+router.get('/getCartWalls', async (_req : Request, res : Response) => {
     const client = new Client({
         database: 'qdio'
     });
@@ -23,8 +23,7 @@ router.get('/getCartWalls', async (req, res, next) => {
     }
 });
 
-router.get('/getCarts/:cartWallId', async (req, res, next) => {
-    const { Client } = require('pg');
+router.get('/getCarts/:cartWallId', async (req : Request, res : Response) => {
     const client = new Client({
         database: 'qdio'
     });
@@ -44,4 +43,4 @@ router.get('/getCarts/:cartWallId', async (req, res, next) => {
     }
 });
 
-module.exports = router;
+export default router;
