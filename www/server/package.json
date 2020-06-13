@@ -32,7 +32,7 @@
     "bootstrap": "^4.3.1"
   },
   "scripts": {
-    "dev": "nodemon ./bin/www",
+    "dev": "nodemon",
     "start": "node --inspect=5858 -r ts-node/register ./bin/www"
   },
   "private": true,
