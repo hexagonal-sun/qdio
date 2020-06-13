@@ -1,26 +1,41 @@
 {
-    "devDependencies": {
-        "nodemon": "^1.19.1"
-    },
-    "dependencies": {
-        "pug": "2.0.0-beta11",
-        "pg": "^7.9.0",
-        "morgan": "~1.9.0",
-        "js-sha3": "^0.8.0",
-        "jquery": "^3.5.0",
-        "http-errors": "~1.6.2",
-        "feather-icons": "^4.19.0",
-        "express-session": "^1.15.6",
-        "express": "~4.16.0",
-        "debug": "~2.6.9",
-        "cookie-parser": "~1.4.3",
-        "bootstrap": "^4.3.1"
-    },
-    "scripts": {
-        "dev": "nodemon ./bin/www",
-        "start": "node ./bin/www"
-    },
-    "private": true,
-    "version": "0.0.0",
-    "name": "www"
+  "devDependencies": {
+    "@types/express": "^4.17.6",
+    "@types/node": "^14.0.13",
+    "nodemon": "^1.19.1",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.5"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      ".git",
+      "node_modules"
+    ],
+    "watch": [
+      "src"
+    ],
+    "exec": "npm start",
+    "ext": "ts"
+  },
+  "dependencies": {
+    "pug": "2.0.0-beta11",
+    "pg": "^7.9.0",
+    "morgan": "~1.9.0",
+    "js-sha3": "^0.8.0",
+    "jquery": "^3.5.0",
+    "http-errors": "~1.6.2",
+    "feather-icons": "^4.19.0",
+    "express-session": "^1.15.6",
+    "express": "~4.16.0",
+    "debug": "~2.6.9",
+    "cookie-parser": "~1.4.3",
+    "bootstrap": "^4.3.1"
+  },
+  "scripts": {
+    "dev": "nodemon ./bin/www",
+    "start": "node --inspect=5858 -r ts-node/register ./bin/www"
+  },
+  "private": true,
+  "version": "0.0.0",
+  "name": "www"
 }
