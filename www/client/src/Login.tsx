@@ -1,19 +1,33 @@
-import React from 'react';
+import React, { ChangeEvent, MouseEvent } from 'react';
 import axios from 'axios';
 import keccak from 'keccak';
 import './Login.css';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { BrowserRouter as Router, Redirect } from 'react-router-dom';
 
-class Login extends React.Component {
-    state = {
+interface State {
+    signInRequested : boolean,
+    isAuthenticated : boolean,
+    alert : string | null,
+    userName : string | null,
+    password : string | null,
+};
+
+interface Props {
+    onAuth : (token : string) => void,
+};
+
+class Login extends React.Component<Props, State> {
+
+    state : Readonly<State> = {
         signInRequested: false,
+        isAuthenticated: false,
         alert: null,
         userName: null,
         password: null,
     };
 
-    handleSignInClick = async e => {
+    handleSignInClick = async (e : MouseEvent<HTMLButtonElement>) => {
         const failMessage = 'Failed to sign in, please try again';
 
         e.preventDefault();
@@ -24,6 +38,9 @@ class Login extends React.Component {
         });
 
         try {
+            if (typeof this.state.password !== 'string')
+                return;
+
             const findUserResponse = await axios.post('/userAuth/findUser', {
                 username: this.state.userName
             });
@@ -57,7 +74,6 @@ class Login extends React.Component {
             }
 
             this.props.onAuth('0xdeadbeef');
-
         } catch (e) {
             console.log(e);
             this.setState({
@@ -67,11 +83,17 @@ class Login extends React.Component {
         }
     }
 
-    handleChange = e => {
-        this.setState({
-            [e.target.name]: e.target.value,
-        });
-    }
+  handleChange = (e : ChangeEvent<HTMLInputElement>) => {
+    let newState : State = {...this.state};
+    const prop = e.target.name;
+
+    if (!(prop === 'userName' || prop === 'password'))
+      return
+
+    newState[prop] = e.target.value;
+
+    this.setState(newState);
+  }
 
     render = () => {
         return (
@@ -106,7 +128,7 @@ class Login extends React.Component {
                       <Button variant="primary"
                               disabled={this.state.signInRequested}
                               type="submit"
-                              onClick={this.state.signInRequested ? null : this.handleSignInClick}
+                              onClick={this.state.signInRequested ? undefined : this.handleSignInClick}
                               block>
                         {this.state.signInRequested ? 'Signing In...' : 'Sign In'}
                       </Button>
