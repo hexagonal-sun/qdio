@@ -1,13 +1,17 @@
 import React from 'react';
 import { ListGroup } from 'react-bootstrap';
+import { ICartWall } from '../interfaces/carts';
 
-class CartWallPicker extends React.Component
+interface IProps 
+{
+    cartWalls : ICartWall[],
+    onChooseCartWall : (wall : ICartWall) => void,
+};
+
+class CartWallPicker extends React.Component<IProps>
 {
     render = () =>
     {
-        if (!this.props.cartWalls)
-            return <></>;
-
         return (
             <>
               <p>Select the cart wall you wish to edit from the list below:</p>
