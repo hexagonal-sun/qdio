@@ -1,14 +1,31 @@
 import React from 'react';
+import { CSSProperties } from 'react';
 import axios from 'axios';
 import { Container, Row, Col } from 'react-bootstrap';
 import './CartWallEditor.css';
+import { ICartWall, ICart } from '../interfaces/carts';
 
-let Cart = props => {
+interface ICartRowProps
+{
+    y : number,
+    key : number,
+    isLoading : boolean,
+    cartWallState : ICart[],
+};
+
+interface ICartProps
+{
+    x : number,
+    isLoading : boolean,
+    cartRowState : ICart[]
+};
+
+let Cart = (props : ICartProps) => {
     let cartText = "Empty";
     let cartState = null;
-    let cartStyle = {
+    let cartStyle : CSSProperties = {
         color: "grey",
-        borderColor: "grey"
+        borderColor: "grey",
     };
 
     if (props.isLoading)
@@ -33,15 +50,14 @@ let Cart = props => {
     );
 };
 
-let CartRow = props => {
-    let cartRowState = null;
+let CartRow = (props : ICartRowProps) => {
+    let cartRowState : ICart[] = [];
 
     if (props.cartWallState)
         cartRowState = props.cartWallState.filter(obj => obj.y === props.y);
 
     let carts = Array.from(Array(5)).map((x, i) => <Cart x={i}
                                                          key={i}
-                                                         y={props.y}
                                                          isLoading={props.isLoading}
                                                          cartRowState={cartRowState}/>);
 
@@ -52,11 +68,22 @@ let CartRow = props => {
     );
 };
 
-class CartWallEditor extends React.Component
+interface IProps
 {
-    state = {
+    cartWall : ICartWall,
+};
+
+interface IState
+{
+    isLoading : boolean,
+    cartWallState : ICart[],
+};
+
+class CartWallEditor extends React.Component<IProps, IState>
+{
+    state : Readonly<IState> = {
         isLoading: true,
-        cartWallState: null,
+        cartWallState: [],
     };
 
     componentDidMount = async () => {
@@ -69,7 +96,7 @@ class CartWallEditor extends React.Component
     };
 
     render = () => {
-        let cartRows = Array.from(Array(4)).map((x, i) => <CartRow y={i}
+        const cartRows = Array.from(Array(4)).map((x, i) => <CartRow y={i}
                                                                    key={i}
                                                                    isLoading={this.state.isLoading}
                                                                    cartWallState={this.state.cartWallState} />);
