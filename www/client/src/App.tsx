@@ -3,13 +3,18 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from './Login';
 import Dashboard from './Dashboard';
 
+interface State
+{
+    authToken : string | null
+};
+
 class App extends React.Component
 {
-    state = {
+    state : Readonly<State> = {
         authToken: null
     }
 
-    handleAuth = token => {
+    handleAuth = (token : string) => {
         this.setState({
             authToken: token
         });
