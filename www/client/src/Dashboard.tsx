@@ -6,8 +6,15 @@ import AudioLibrary from './AudioLibrary';
 import CartManagement from './carts/CartManagement';
 import './Dashboard.css';
 
-let QdioNavItem = props => {
-    let icon = React.cloneElement(props.icon, {className: 'feather'});
+interface INavItemProps
+{
+  icon: JSX.Element,
+  viewKey : string,
+  linkText : string,
+};
+
+const QdioNavItem = (props : INavItemProps) => {
+    const icon = React.cloneElement(props.icon, {className: 'feather'});
     return (
         <Nav.Item as="li">
           <Nav.Link style={{paddingLeft: 16 + "px"}} eventKey={props.viewKey}>
@@ -17,7 +24,13 @@ let QdioNavItem = props => {
     );
 };
 
-class Dashboard extends React.Component
+
+interface IProps
+{
+  onDeAuth : () => void,
+};
+
+class Dashboard extends React.Component<IProps>
 {
     views = [
         {key: "overview", view: <Overview />},
@@ -29,7 +42,7 @@ class Dashboard extends React.Component
         currentView: this.views[0],
     };
 
-    handleNavSelect = viewKey => {
+    handleNavSelect = (viewKey : string) => {
         this.setState({
             currentView: this.views.find(obj => obj.key === viewKey),
         });
