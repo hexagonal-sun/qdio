@@ -5,7 +5,7 @@ import './Login.css';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { BrowserRouter as Router, Redirect } from 'react-router-dom';
 
-interface State {
+interface IState {
     signInRequested : boolean,
     isAuthenticated : boolean,
     alert : string | null,
@@ -13,13 +13,13 @@ interface State {
     password : string | null,
 };
 
-interface Props {
+interface IProps {
     onAuth : (token : string) => void,
 };
 
-class Login extends React.Component<Props, State> {
+class Login extends React.Component<IProps, IState> {
 
-    state : Readonly<State> = {
+    state : Readonly<IState> = {
         signInRequested: false,
         isAuthenticated: false,
         alert: null,
@@ -84,7 +84,7 @@ class Login extends React.Component<Props, State> {
     }
 
   handleChange = (e : ChangeEvent<HTMLInputElement>) => {
-    let newState : State = {...this.state};
+    let newState : IState = {...this.state};
     const prop = e.target.name;
 
     if (!(prop === 'userName' || prop === 'password'))
