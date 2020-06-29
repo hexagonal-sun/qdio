@@ -7,14 +7,13 @@ interface IProps
 {
     x : number,
     isLoading : boolean,
-    cartRowState : ICart[]
+    cart : ICart | null,
 };
 
 export class Cart extends React.Component<IProps>
 {
     render = () => {
         let cartText = "Empty";
-        let cartState = null;
         let cartStyle : CSSProperties = {
             color: "grey",
             borderColor: "grey",
@@ -23,15 +22,12 @@ export class Cart extends React.Component<IProps>
         if (this.props.isLoading)
             cartText = "Loading";
 
-        if (this.props.cartRowState)
-            cartState = this.props.cartRowState.find(obj => obj.x === this.props.x);
-
-        if (cartState) {
-            cartText = cartState.title;
+        if (this.props.cart) {
+            cartText = this.props.cart.title;
             cartStyle = {
-                color: cartState.text_colour,
+                color: this.props.cart.text_colour,
                 borderColor: "black",
-                backgroundColor: cartState.bg_colour,
+                backgroundColor: this.props.cart.bg_colour,
             };
         }
 

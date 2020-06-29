@@ -13,16 +13,17 @@ interface ICartRowProps
     cartWallState : ICart[],
 };
 
-let CartRow = (props : ICartRowProps) => {
+const CartRow = (props : ICartRowProps) => {
     let cartRowState : ICart[] = [];
 
     if (props.cartWallState)
         cartRowState = props.cartWallState.filter(obj => obj.y === props.y);
 
-    let carts = Array.from(Array(5)).map((_x, i) => <Cart x={i}
-                                                          key={i}
-                                                          isLoading={props.isLoading}
-                                                          cartRowState={cartRowState}/>);
+    const carts = Array.from(Array(5)).map((_x, i) =>
+        <Cart x={i}
+              key={i}
+              isLoading={props.isLoading}
+              cart={cartRowState.find(cart => cart.x == i) || null}/>);
 
     return (
         <Row>
