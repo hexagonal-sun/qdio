@@ -1,7 +1,8 @@
 import React from 'react';
 import { CSSProperties } from 'react';
-import { Col } from 'react-bootstrap';
+import { Col, Modal, Button } from 'react-bootstrap';
 import { ICart } from '../interfaces/carts';
+import { CartEditor } from './CartEditor';
 
 interface IProps
 {
@@ -10,8 +11,27 @@ interface IProps
     cart? : ICart,
 };
 
-export class Cart extends React.Component<IProps>
+interface IState
 {
+    showModal : boolean,
+};
+
+export class Cart extends React.Component<IProps, IState>
+{
+    state : Readonly<IState> = {
+        showModal : false,
+    };
+
+    private handleShow()
+    {
+        this.setState({showModal : true});
+    }
+
+    private handleClose()
+    {
+        this.setState({showModal : false});
+    }
+
     render = () => {
         let cartText = "Empty";
         let cartStyle : CSSProperties = {
@@ -32,9 +52,31 @@ export class Cart extends React.Component<IProps>
         }
 
         return (
-            <Col className="cartCell text-center" style={cartStyle}>
-                {cartText}
-            </Col>
+            <>
+                <Col className="cartCell text-center" style={cartStyle}
+                     onClick={() => this.handleShow()}>
+                    {cartText}
+                </Col>
+                <Modal show={this.state.showModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Edit Cart '{this.props.cart?.title}'</Modal.Title>
+                    </Modal.Header>
+
+                    <Modal.Body>
+                        <CartEditor cart={this.props.cart} />
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button variant="secondary"
+                                onClick={() => this.handleClose()}>
+                            Close
+                        </Button>
+                        <Button variant="primary">
+                            Save changes
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            </>
         );
     }
 }
