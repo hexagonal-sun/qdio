@@ -133,6 +133,7 @@ RETURNS TABLE (
     y             integer,
     bg_colour     varchar,
     text_colour   varchar,
+    theme_name    text,
     file_location text
 )
 AS $$
@@ -143,6 +144,7 @@ BEGIN
                         cart.y,
                         bgcol.hex,
                         textcol.hex,
+                        cart_theme.name,
                         audio_file.location
         FROM cart
         INNER JOIN cart_theme ON cart.theme = cart_theme.id
