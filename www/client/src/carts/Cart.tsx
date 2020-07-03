@@ -7,7 +7,7 @@ interface IProps
 {
     x : number,
     isLoading : boolean,
-    cart : ICart | null,
+    cart? : ICart,
 };
 
 export class Cart extends React.Component<IProps>

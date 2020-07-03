@@ -23,7 +23,7 @@ const CartRow = (props : ICartRowProps) => {
         <Cart x={i}
               key={i}
               isLoading={props.isLoading}
-              cart={cartRowState.find(cart => cart.x == i) || null}/>);
+              cart={cartRowState.find(cart => cart.x === i)}/>);
 
     return (
         <Row>
