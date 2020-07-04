@@ -2,6 +2,8 @@ import React from 'react';
 import { ICart } from '../interfaces/carts';
 import { Form } from 'react-bootstrap';
 import axios from 'axios';
+import 'react-h5-audio-player/lib/styles.css';
+import AudioPlayer from 'react-h5-audio-player';
 
 interface ICartTheme
 {
@@ -60,6 +62,13 @@ export class CartEditor extends React.Component<IProps, IState>
                                   value={this.props.cart?.theme_name}>
                         {this.renderThemeChoices(this.state.themes)}
                     </Form.Control>
+                </Form.Group>
+                <Form.Group controlId="formCartPreview">
+                    <Form.Label>Preview</Form.Label>
+                      <AudioPlayer
+                          customVolumeControls={[]}
+                          customAdditionalControls={[]}
+                          src={this.props.cart?.file_location} />
                 </Form.Group>
             </Form>
         );
