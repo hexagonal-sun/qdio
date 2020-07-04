@@ -15,6 +15,7 @@ RUN npm install
 
 COPY bin/ bin/
 COPY src/ src/
+copy audio/ public/
 
 # start app
 CMD ["npm", "run", "dev"]
