@@ -63,4 +63,31 @@ router.get('/themes', async (_req : Request, res : Response) => {
     }
 });
 
+router.get('/:wallId/:page/:x/:y', async(req : Request, res : Response) => {
+    const client = new Client({
+        database: 'qdio'
+    });
+
+    try {
+        await client.connect();
+
+        const query = 'SELECT * FROM get_cart($1, $2, $3, $4)';
+        const qRes = await client.query(query, [
+            req.params.wallId,
+            req.params.page,
+            req.params.x,
+            req.params.y,
+        ]);
+
+        if (qRes.rowCount == 0)
+            return res.status(404).send();
+
+        console.log(qRes.rows[0]);
+
+        res.send(qRes.rows[0]);
+    } catch(err) {
+        res.status(500).send(err);
+    }
+});
+
 export default router;
